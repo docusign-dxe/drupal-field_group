@@ -51,6 +51,14 @@ function field_group_theme() {
       'render element' => 'element',
       'template' => 'horizontal-tabs',
     ),
+    'field_group_accordion_item' => array(
+      'render element' => 'element',
+      'template' => 'field-group-accordion-item',
+    ),
+    'field_group_accordion' => array(
+      'render element' => 'element',
+      'template' => 'field-group-accordion',
+    ),
   );
 }
 
@@ -229,25 +237,6 @@ function field_group_field_group_build_pre_render_alter(& $element) {
     }
   }
 
-}
-
-/**
- * Returns HTML for an element's children fieldsets as horizontal tabs.
- *
- * @param $variables
- *   An associative array containing:
- *   - element: An associative array containing the properties and children of the
- *     fieldset. Properties used: #children.
- *
- * @ingroup themeable
- */
-function theme_horizontal_tabs($variables) {
-  $element = $variables['element'];
-
-  $output = '<h2 class="visually-hidden">' . (!empty($element['#title']) ? $element['#title'] : t('Horizontal Tabs')) . '</h2>';
-  $output .= '<div class="horizontal-tabs-panes">' . $element['#children'] . '</div>';
-
-  return $output;
 }
 
 /**
@@ -757,4 +746,49 @@ function field_group_pre_render_div(&$element, $group, &$rendering_object) {
 function template_preprocess_horizontal_tabs(&$variables) {
   $element = $variables['element'];
   $variables['children'] = (!empty($element['#children'])) ? $element['#children'] : '';
+}
+
+/**
+ * Prepares variables for fieldgroup accordion templates.
+ *
+ * Default template: field-group-accordion.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties and children of
+ *     the details element. Properties used: #children.
+ *
+ */
+function template_preprocess_field_group_accordion(&$variables) {
+  $element = $variables['element'];
+  $variables['children'] = (!empty($element['#children'])) ? $element['#children'] : '';
+}
+
+/**
+ * Prepares variables for fieldgroup accordion item templates.
+ *
+ * Default template: field-group-accordion-item.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties and children of
+ *     the details element.
+ *
+ */
+function template_preprocess_field_group_accordion_item(&$variables) {
+
+  $element = $variables['element'];
+
+  if (!empty($element['#title'])) {
+    $variables['title'] = $element['#title'];
+  }
+
+  if (!empty($element['#description'])) {
+    $variables['description'] = $element['#description'];
+  }
+
+  $variables['collapsed'] = $element['#collapsed'];
+  $variables['label_attributes'] = new \Drupal\Core\Template\Attribute();
+  $variables['children'] = (!empty($element['#children'])) ? $element['#children'] : '';
+
 }

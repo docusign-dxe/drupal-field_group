@@ -8,9 +8,16 @@ Drupal.FieldGroup.Effects.processAccordion = {
     $('div.field-group-accordion-wrapper', context).once('fieldgroup-effects', function () {
       var wrapper = $(this);
 
+      var active = false;
+      wrapper.find('.accordion-item').each(function(i) {
+        if ($(this).hasClass('field-group-accordion-active')) {
+          active = i;
+        }
+      });
+
       wrapper.accordion({
         heightStyle: "content",
-        active: '.field-group-accordion-active',
+        active: active,
         collapsible: true,
         changestart: function(event, ui) {
           if ($(this).hasClass('effect-none')) {

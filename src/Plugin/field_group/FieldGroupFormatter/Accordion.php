@@ -28,16 +28,15 @@ class Accordion extends FieldGroupFormatterBase {
    * {@inheritdoc}
    */
   public function preRender(&$element) {
-    // Add the jQuery UI accordion.
-    $element['#attached']['library'][] = 'field_group/formatter.accordion';
+
+    $form_state = new \Drupal\Core\Form\FormState();
 
     $element += array(
-      '#type' => 'markup',
-      '#suffix' => '</div>',
+      '#type' => 'field_group_accordion',
+      '#attributes' => array('class' => explode(' ', trim($this->getSetting('classes')))),
     );
 
-    $css_classes = $this->getSetting('classes') ? '' : ' ' . $this->getSetting('classes');
-    $element += array('#prefix' => '<div class="field-group-accordion-wrapper' . $css_classes . '">');
+    \Drupal\field_group\Element\Accordion::processAccordion($element, $form_state);
   }
 
   /**

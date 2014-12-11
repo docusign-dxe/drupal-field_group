@@ -101,8 +101,4 @@ class Fieldset extends FieldGroupFormatterBase {
     ) + parent::defaultSettings();
   }
 
-  public function render() {
-
-  }
-
 }

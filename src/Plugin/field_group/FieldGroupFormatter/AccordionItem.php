@@ -34,20 +34,13 @@ class AccordionItem extends FieldGroupFormatterBase {
    */
   public function preRender(&$element) {
 
-    $active_class = $this->getSetting('collapsed') ? '' : ' field-group-accordion-active';
-    $extra_classes = $this->getSetting('classes') ? ' ' . $this->getSetting('classes') : '';
-
     $element += array(
-      '#type' => 'markup',
-      '#prefix' => '<h3 class="field-group-format-toggler accordion-item' . $active_class . '">
-        <a href="#">' . String::checkPlain(\Drupal::translation()->translate($this->getLabel())) . '</a></h3>
-        <div class="field-group-format-wrapper' . $extra_classes . '">',
-      '#suffix' => '</div>',
+      '#type' => 'field_group_accordion_item',
+      '#collapsed' => $this->getSetting('formatter'),
+      '#description' => $this->getSetting('description'),
+      '#title' => \Drupal::translation()->translate($this->getLabel()),
+      '#attributes' => array('class' => explode(' ', trim($this->getSetting('classes')))),
     );
-
-    if ($this->getSetting('description')) {
-      $element['#prefix'] .= '<div class="description">' . $this->getSetting('description') . '</div>';
-    }
   }
 
   /**
@@ -106,10 +99,6 @@ class AccordionItem extends FieldGroupFormatterBase {
       'description' => '',
       'required_fields' => 1,
     ) + parent::defaultSettings();
-  }
-
-  public function render() {
-
   }
 
 }
