@@ -506,7 +506,7 @@ function field_group_field_overview_validate($form, FormStateInterface $form_sta
 
     // Missing group name.
     if (!$group['group_name']) {
-      \Drupal::formBuilder()->setErrorByName('fields][_add_new_group][group_name', $form_state, t('Add new group: you need to provide a group name.'));
+      $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: you need to provide a group name.'));
     }
     // Group name validation.
     else {
@@ -520,15 +520,15 @@ function field_group_field_overview_validate($form, FormStateInterface $form_sta
 
       // Invalid group name.
       if (!preg_match('!^group_[a-z0-9_]+$!', $group_name)) {
-        \Drupal::formBuilder()->setErrorByName('fields][_add_new_group][group_name', $form_state, t('Add new group: the group name %group_name is invalid. The name must include only lowercase unaccentuated letters, numbers, and underscores.', array('%group_name' => $group_name)));
+        $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: the group name %group_name is invalid. The name must include only lowercase unaccentuated letters, numbers, and underscores.', array('%group_name' => $group_name)));
       }
       if (Unicode::strlen($group_name) > 32) {
-        \Drupal::formBuilder()->setErrorByName('fields][_add_new_group][group_name', $form_state, t("Add new group: the group name %group_name is too long. The name is limited to 32 characters, including the 'group_' prefix.", array('%group_name' => $group_name)));
+        $form_state->setErrorByName('fields][_add_new_group][group_name', t("Add new group: the group name %group_name is too long. The name is limited to 32 characters, including the 'group_' prefix.", array('%group_name' => $group_name)));
       }
 
       // Group name already exists.
       if (field_group_exists($group_name, $entity_type, $bundle, $context, $mode)) {
-        \Drupal::formBuilder()->setErrorByName('fields][_add_new_group][group_name', $form_state, t('Add new group: the group name %group_name already exists.', array('%group_name' => $group_name)));
+        $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: the group name %group_name already exists.', array('%group_name' => $group_name)));
       }
     }
   }
@@ -581,10 +581,6 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
       'format_type' => $values['format']['type'],
     );
     $new_group->format_settings = _field_group_get_default_formatter_settings($values['format']['type'], $context);
-
-    $classes = _field_group_get_html_classes($new_group);
-    $new_group->format_settings['classes'] = implode(' ', $classes->optional);
-
     field_group_group_save($new_group);
 
     // Store new group information for any additional submit handlers.
@@ -763,7 +759,7 @@ function field_group_field_ui_clone_field_groups_validate($form, FormStateInterf
 
   if (empty($source_groups)) {
     // Report error found with selection.
-    \Drupal::formBuilder()->setErrorByName('additional_settings][fieldgroup_clone', $form_state, t('No field groups were found in selected view mode.'));
+    $form_state->setErrorByName('additional_settings][fieldgroup_clone', t('No field groups were found in selected view mode.'));
     return;
   }
 
