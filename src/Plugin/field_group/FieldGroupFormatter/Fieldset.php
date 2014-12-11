@@ -34,6 +34,7 @@ class Fieldset extends FieldGroupFormatterBase {
       '#type' => 'fieldset',
       '#title' => String::checkPlain(\Drupal::translation()->translate($this->getLabel())),
       '#pre_render' => array(),
+      '#attributes' => array(),
     );
 
     if ($this->getSetting('description')) {
@@ -47,9 +48,7 @@ class Fieldset extends FieldGroupFormatterBase {
     }
 
     if ($this->getSetting('classes')) {
-      $element += array(
-        '#attributes' => array('class' => explode(' ', $this->getSetting('classes'))),
-      );
+      $element['#attributes'] += array('class' => explode(' ', $this->getSetting('classes')));
     }
   }
 

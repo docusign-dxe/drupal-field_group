@@ -21,3 +21,9 @@ div.field-group-tabs-wrapper div.field-type-file legend,
 div.field-group-tabs-wrapper div.field-type-datetime legend {
   display: block;
 }
+
+[dir="rtl"] form .ui-accordion h3,
+[dir="rtl"] form .ui-accordion h3.ui-state-active {
+  padding-left: 0;
+  padding-right: 2em;
+}
