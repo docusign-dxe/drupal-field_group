@@ -506,7 +506,7 @@ function field_group_field_overview_validate($form, FormStateInterface $form_sta
 
     // Missing group name.
     if (!$group['group_name']) {
-      form_set_error('fields][_add_new_group][group_name', t('Add new group: you need to provide a group name.'));
+      \Drupal::formBuilder()->setErrorByName('fields][_add_new_group][group_name', $form_state, t('Add new group: you need to provide a group name.'));
     }
     // Group name validation.
     else {
@@ -515,7 +515,7 @@ function field_group_field_overview_validate($form, FormStateInterface $form_sta
       // Add the 'group_' prefix.
       if (Unicode::substr($group_name, 0, 6) != 'group_') {
         $group_name = 'group_' . $group_name;
-        form_set_value($form['fields']['_add_new_group']['group_name'], $group_name, $form_state);
+        $form_state->setValueForElement($form['fields']['_add_new_group']['group_name'], $group_name);
       }
 
       // Invalid group name.
