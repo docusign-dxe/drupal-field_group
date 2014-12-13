@@ -65,7 +65,7 @@ class RouteSubscriber extends RouteSubscriberBase {
         $route = new Route(
           "$path/groups/{field_group}/delete",
           array('_form' => '\Drupal\field_group\Form\FieldGroupDeleteForm'),
-          array('_permission' => 'administer site configuration'),
+          array('_permission' => 'administer ' . $entity_type_id . ' fields'),
           $options
         );
         $collection->add("field_ui.field_group_delete_$entity_type_id", $route);

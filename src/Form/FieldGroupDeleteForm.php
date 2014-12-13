@@ -53,7 +53,6 @@ class FieldGroupDeleteForm extends ConfirmFormBase {
     $bundle_label = $bundles[$this->fieldGroup->entity_type][$this->fieldGroup->bundle]['label'];
 
     field_group_group_delete($this->fieldGroup);
-    \Drupal::cache()->invalidate('field_groups');
 
     drupal_set_message(t('The group %group has been deleted from the %type content type.', array('%group' => t($this->fieldGroup->label), '%type' => $bundle_label)));
 
