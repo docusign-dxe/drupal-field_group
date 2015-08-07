@@ -42,7 +42,7 @@ Drupal.behaviors.horizontalTabs = {
       return;
     }
 
-    $(context).find('[data-horizontal-tabs-panes]').once('horizontal-tabs', function () {
+    $(context).find('[data-horizontal-tabs-panes]').once('horizontal-tabs').each(function () {
 
       var $this = $(this).addClass('horizontal-tabs-panes');
       var focusID = $(':hidden.horizontal-tabs-active-tab', this).val();
