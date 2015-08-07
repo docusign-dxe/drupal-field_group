@@ -7,7 +7,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -51,7 +51,7 @@ class AccordionItem extends FieldGroupFormatterBase {
     $form = parent::settingsForm();
 
     $form['formatter'] = array(
-      '#title' => t('Default state'),
+      '#title' => $this->t('Default state'),
       '#type' => 'select',
       '#options' => array_combine($this->pluginDefinition['format_types'], $this->pluginDefinition['format_types']),
       '#default_value' => $this->getSetting('formatter'),
@@ -61,7 +61,7 @@ class AccordionItem extends FieldGroupFormatterBase {
     if ($this->context == 'form') {
       $form['required_fields'] = array(
         '#type' => 'checkbox',
-        '#title' => t('Mark group as required if it contains required fields.'),
+        '#title' => $this->t('Mark group as required if it contains required fields.'),
         '#default_value' => $this->getSetting('required_fields'),
         '#weight' => 2,
       );
@@ -78,11 +78,11 @@ class AccordionItem extends FieldGroupFormatterBase {
     $summary = array();
 
     if ($this->getSetting('required_fields')) {
-      $summary[] = \Drupal::translation()->translate('Mark as required');
+      $summary[] = $this->t('Mark as required');
     }
 
     if ($this->getSetting('description')) {
-      $summary[] = \Drupal::translation()->translate('Description : @description',
+      $summary[] = $this->t('Description : @description',
         array('@description' => $this->getSetting('description'))
       );
     }

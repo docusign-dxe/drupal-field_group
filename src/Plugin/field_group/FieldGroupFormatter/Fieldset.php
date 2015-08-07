@@ -7,7 +7,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -29,10 +29,9 @@ class Fieldset extends FieldGroupFormatterBase {
    * {@inheritdoc}
    */
   public function preRender(&$element) {
-
     $element += array(
       '#type' => 'fieldset',
-      '#title' => String::checkPlain(\Drupal::translation()->translate($this->getLabel())),
+      '#title' => SafeMarkup::checkPlain($this->t($this->getLabel())),
       '#pre_render' => array(),
       '#attributes' => array(),
     );
@@ -62,7 +61,7 @@ class Fieldset extends FieldGroupFormatterBase {
     if ($this->context == 'form') {
       $form['required_fields'] = array(
         '#type' => 'checkbox',
-        '#title' => t('Mark group as required if it contains required fields.'),
+        '#title' => $this->t('Mark group as required if it contains required fields.'),
         '#default_value' => $this->getSetting('required_fields'),
         '#weight' => 2,
       );
@@ -79,11 +78,11 @@ class Fieldset extends FieldGroupFormatterBase {
     $summary = parent::settingsSummary();
 
     if ($this->getSetting('required_fields')) {
-      $summary[] = \Drupal::translation()->translate('Mark as required');
+      $summary[] = $this->t('Mark as required');
     }
 
     if ($this->getSetting('description')) {
-      $summary[] = \Drupal::translation()->translate('Description : @description',
+      $summary[] = $this->t('Description : @description',
         array('@description' => $this->getSetting('description'))
       );
     }

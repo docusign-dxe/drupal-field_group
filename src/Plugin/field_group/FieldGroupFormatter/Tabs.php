@@ -7,7 +7,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -64,7 +64,7 @@ class Tabs extends FieldGroupFormatterBase {
 
     // By default tabs don't have titles but you can override it in the theme.
     if ($this->getLabel()) {
-      $element['#title'] = String::checkPlain($this->getLabel());
+      $element['#title'] = SafeMarkup::checkPlain($this->getLabel());
     }
 
   }
@@ -77,11 +77,11 @@ class Tabs extends FieldGroupFormatterBase {
     $form = parent::settingsForm();
 
     $form['direction'] = array(
-      '#title' => t('Direction'),
+      '#title' => $this->t('Direction'),
       '#type' => 'select',
       '#options' => array(
-        'vertical' => t('Vertical'),
-        'horizontal' => t('Horizontal'),
+        'vertical' => $this->t('Vertical'),
+        'horizontal' => $this->t('Horizontal'),
       ),
       '#default_value' => $this->getSetting('direction'),
       '#weight' => 1,
@@ -96,7 +96,7 @@ class Tabs extends FieldGroupFormatterBase {
   public function settingsSummary() {
 
     $summary = parent::settingsSummary();
-    $summary[] = \Drupal::translation()->translate('Direction: @direction',
+    $summary[] = $this->t('Direction: @direction',
       array('@direction' => $this->getSetting('direction'))
     );
 

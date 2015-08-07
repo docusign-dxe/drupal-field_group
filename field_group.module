@@ -6,14 +6,14 @@
  */
 
 use Drupal\Component\Utility\Xss;
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\ContentEntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 
-module_load_include('inc', 'field_group', 'includes/helpers');
+require_once __DIR__ . '/includes/helpers.inc';
 
 /**
  * Implements hook_theme_registry_alter().
@@ -66,18 +66,18 @@ function field_group_theme() {
  * Implements hook_form_FORM_ID_alter().
  * Using hook_form_field_ui_form_display_overview_form_alter.
  */
-function field_group_form_field_ui_form_display_overview_form_alter(&$form, FormStateInterface $form_state) {
+function field_group_form_entity_form_display_edit_form_alter(&$form, FormStateInterface $form_state) {
   $form_state->loadInclude('field_group', 'inc', 'includes/field_ui');
-  field_group_field_ui_display_form_alter($form, $form_state, 'form');
+  field_group_field_ui_display_form_alter($form, $form_state);
 }
 
 /**
  * Implements hook_form_FORM_ID_alter().
  * Using hook_form_field_ui_display_overview_form_alter.
  */
-function field_group_form_field_ui_display_overview_form_alter(&$form, FormStateInterface $form_state) {
+function field_group_form_entity_view_display_edit_form_alter(&$form, FormStateInterface $form_state) {
   $form_state->loadInclude('field_group', 'inc', 'includes/field_ui');
-  field_group_field_ui_display_form_alter($form, $form_state, 'view');
+  field_group_field_ui_display_form_alter($form, $form_state);
 }
 
 /**
@@ -102,7 +102,7 @@ function field_group_field_info_max_weight($entity_type, $bundle, $context, $con
  * a pre_render callback or doing the nesting logic immediately in the alter.
  */
 function field_group_field_attach_form($entity_type, $entity, &$form, FormStateInterface $form_state, $langcode) {
-  $form['#attached']['css'][] = drupal_get_path('module', 'field_group') . '/field_group.field_ui.css';
+  $form['#attached']['library'][] = 'field_group/field_ui';
   field_group_attach_groups($form, 'form', $form_state);
   $form['#pre_render'][] = 'field_group_form_pre_render';
 }
@@ -111,7 +111,6 @@ function field_group_field_attach_form($entity_type, $entity, &$form, FormStateI
  * Implements hook_form_alter().
  */
 function field_group_form_alter(array &$form, FormStateInterface $form_state) {
-
   if ($form_state->getFormObject() instanceof ContentEntityFormInterface) {
 
     /**
@@ -126,7 +125,7 @@ function field_group_form_alter(array &$form, FormStateInterface $form_state) {
       'entity' => $entity,
       'context' => 'form',
       'display_context' => 'form',
-      'mode' => $form_display->mode,
+      'mode' => $form_display->getMode(),
     );
 
     field_group_attach_groups($form, $context);
@@ -140,9 +139,9 @@ function field_group_form_alter(array &$form, FormStateInterface $form_state) {
  */
 function field_group_entity_display_build_alter(&$element, $context) {
 
-  $context['entity_type'] = $context['display']->targetEntityType;
-  $context['bundle'] = $context['display']->bundle;
-  $context['mode'] = $context['display']->mode;
+  $context['entity_type'] = $context['display']->getTargetEntityTypeId();
+  $context['bundle'] = $context['display']->getTargetBundle();
+  $context['mode'] = $context['display']->getMode();
   $context['context'] = 'view';
 
   field_group_attach_groups($element, $context);
@@ -224,12 +223,12 @@ function field_group_field_group_build_pre_render_alter(& $element) {
 
   // Move additional settings to the last multipage pane if configured that way.
   // Note that multipages MUST be in the root of the form.
-  foreach (element_children($element) as $name) {
+  foreach (Element::children($element) as $name) {
     if (isset($element[$name]['#type']) && $element[$name]['#type'] == 'multipage' && isset($element['additional_settings'])) {
       $parent_group = $element['#fieldgroups'][$name];
-      $move_additional = isset($parent_group->format_settings['instance_settings']['move_additional']) ? $parent_group->format_settings['instance_settings']['move_additional'] : 1;
+      $move_additional = isset($parent_group->format_settings['move_additional']) ? $parent_group->format_settings['move_additional'] : 1;
       $last_pane = NULL;
-      foreach (element_children($element[$name], TRUE) as $pane) {
+      foreach (Element::children($element[$name], TRUE) as $pane) {
         $last_pane = $pane;
       }
       $element[$name][$last_pane]['additional_settings'] = $element['additional_settings'];
@@ -348,7 +347,7 @@ function field_group_fields_nest(&$element, &$vars = NULL) {
   // in groups, and insert placeholder element for the new group field in the
   // correct location within the form structure.
   $element_clone = array();
-  foreach (element_children($element) as $child_name) {
+  foreach (Element::children($element) as $child_name) {
     $element_clone[$child_name] = $element[$child_name];
     // If this element is in a group, create the placeholder element.
     if (isset($element['#group_children'][$child_name])) {
@@ -428,7 +427,7 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
 
   // Let modules define their wrapping element.
   // Note that the group element has no properties, only elements.
-  foreach (module_implements('field_group_pre_render') as $module) {
+  foreach (Drupal::moduleHandler()->getImplementations('field_group_pre_render') as $module) {
     // The intention here is to have the opportunity to alter the
     // elements, as defined in hook_field_group_formatter_info.
     // Note, implement $element by reference!
@@ -605,7 +604,7 @@ function field_group_remove_empty_form_groups($name, & $element, $groups, &$form
 
   $exceptions = array('user__account', 'comment__author');
 
-  $children = element_children($element);
+  $children = Element::children($element);
 
   $hasChildren = FALSE;
   if (count($children)) {
@@ -696,9 +695,9 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
  */
 function field_group_pre_render_div(&$element, $group, &$rendering_object) {
 
-  $show_label = isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : 0;
-  $label_element = isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : 'h2';
-  $effect = isset($group->format_settings['instance_settings']['effect']) ? $group->format_settings['instance_settings']['effect'] : 'none';
+  $show_label = isset($group->format_settings['show_label']) ? $group->format_settings['show_label'] : 0;
+  $label_element = isset($group->format_settings['label_element']) ? $group->format_settings['label_element'] : 'h2';
+  $effect = isset($group->format_settings['effect']) ? $group->format_settings['effect'] : 'none';
 
   $element['#type'] = 'markup';
   $id = isset($element['#id']) ? ' id="' . $element['#id'] . '"' : '';
@@ -706,7 +705,7 @@ function field_group_pre_render_div(&$element, $group, &$rendering_object) {
   if ($group->format_settings['formatter'] != 'open') {
 
     $element['#prefix'] = '<div' . $id . ' class="' . $group->classes . '">
-      <' . $label_element . '><span class="field-group-format-toggler">' . String::checkPlain(t($group->label)) . '</span></' . $label_element . '>
+      <' . $label_element . '><span class="field-group-format-toggler">' . SafeMarkup::checkPlain(t($group->label)) . '</span></' . $label_element . '>
       <div class="field-group-format-wrapper" style="display: ' . (!empty($group->collapsed) ? 'none' : 'block') . ';">';
     $element['#suffix'] = '</div></div>';
 
@@ -722,7 +721,7 @@ function field_group_pre_render_div(&$element, $group, &$rendering_object) {
 
     $element['#prefix'] = '<div' . $id . $class_attribute . '>';
     if ($show_label) {
-      $element['#prefix'] .= '<' . $label_element . '><span>' . String::checkPlain(t($group->label)) . '</span></' . $label_element . '>';
+      $element['#prefix'] .= '<' . $label_element . '><span>' . SafeMarkup::checkPlain(t($group->label)) . '</span></' . $label_element . '>';
     }
     $element['#suffix'] = '</div>';
   }
