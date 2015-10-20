@@ -25,7 +25,7 @@ trait FieldGroupTestTrait {
       $data['format_settings'] = array();
     }
 
-    $data['format_settings'] += _field_group_get_default_formatter_settings('fieldset');
+    $data['format_settings'] += _field_group_get_default_formatter_settings($data['format_type']);
 
     $group_name = 'group_' . Unicode::strtolower($this->randomMachineName());
 
