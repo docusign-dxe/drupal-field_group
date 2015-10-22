@@ -67,6 +67,14 @@ class Tabs extends FieldGroupFormatterBase {
       $element['#title'] = SafeMarkup::checkPlain($this->getLabel());
     }
 
+    // Search for a tab that was marked as open. First one wins.
+    foreach (\Drupal\Core\Render\Element::children($element) as $tab_name) {
+      if (!empty($element[$tab_name]['#open'])) {
+        $element[$this->group->group_name . '__active_tab']['#default_value'] = $tab_name;
+        break;
+      }
+    }
+
   }
 
   /**

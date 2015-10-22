@@ -22,7 +22,7 @@ class Accordion extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    
+
     return array(
       '#process' => array(
         array($class, 'processAccordion'),
@@ -47,6 +47,15 @@ class Accordion extends RenderElement {
 
     // Add the jQuery UI accordion.
     $element['#attached']['library'][] = 'field_group/formatter.accordion';
+
+    // Add the effect class.
+    if (isset($element['#effect'])) {
+      if (!isset($element['#attributes']['class'])) {
+        $element['#attributes']['class'] = array();
+      }
+      $element['#attributes']['class'][] = 'effect-' . $element['#effect'];
+    }
+
     return $element;
   }
 

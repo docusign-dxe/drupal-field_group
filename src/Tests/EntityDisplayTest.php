@@ -139,7 +139,7 @@ class EntityDisplayTest extends WebTestBase {
     $this->assertFieldByXPath("//div[contains(@class, 'test-class')]", NULL, t('Test class set on wrapper div') . 'class="' . $group->group_name . ' test-class');
 
     // Test group label.
-    $this->assertNoRaw('<h3>' . $data['label'] . '</h3>', t('Label is not shown'));
+    $this->assertNoRaw('<h3><span>' . $data['label'] . '</span></h3>', t('Label is not shown'));
 
     // Set show label to true.
     $group->format_settings['show_label'] = TRUE;
@@ -211,8 +211,6 @@ class EntityDisplayTest extends WebTestBase {
       ),
     );
     $tabs_group = $this->createGroup('node', $this->type, 'view', 'default', $data);
-
-    $this->drupalGet('admin/structure/types/manage/' . $this->type . '/display');
 
     $this->drupalGet('node/' . $this->node->id());
 

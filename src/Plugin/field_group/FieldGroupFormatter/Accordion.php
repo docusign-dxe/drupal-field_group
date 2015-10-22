@@ -34,6 +34,7 @@ class Accordion extends FieldGroupFormatterBase {
     $element += array(
       '#type' => 'field_group_accordion',
       '#attributes' => array('class' => explode(' ', trim($this->getSetting('classes')))),
+      '#effect' => $this->getSetting('effect'),
     );
 
     \Drupal\field_group\Element\Accordion::processAccordion($element, $form_state);

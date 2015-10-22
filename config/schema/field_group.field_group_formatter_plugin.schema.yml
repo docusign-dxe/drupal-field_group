@@ -13,6 +13,9 @@ field_group.field_group_formatter_plugin.accordion_item:
     formatter:
       type: string
       label: 'Formatting of the item'
+    description:
+      type: string
+      label: 'description of the item'
     required_fields:
       type: boolean
       label: 'Mark for required fields'
@@ -74,6 +77,9 @@ field_group.field_group_formatter_plugin.tab:
     formatter:
       type: string
       label: 'default state for the tab'
+    description:
+      type: string
+      label: 'description of the tab'
     required_fields:
       type: boolean
       label: 'Mark for required fields'

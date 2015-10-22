@@ -45,6 +45,10 @@ class Tab extends FieldGroupFormatterBase {
       $element['#attributes']['class'] = explode(' ', $this->getSetting('classes'));
     }
 
+    if ($this->getSetting('formatter') == 'open') {
+      $element['#open'] = TRUE;
+    }
+
     // Front-end and back-end on configuration will lead
     // to vertical tabs nested in a separate vertical group.
     if (!empty($this->group->parent_name)) {
@@ -68,6 +72,13 @@ class Tab extends FieldGroupFormatterBase {
       '#type' => 'select',
       '#options' => array_combine($this->pluginDefinition['format_types'], $this->pluginDefinition['format_types']),
       '#default_value' => $this->getSetting('formatter'),
+      '#weight' => -4,
+    );
+
+    $form['description'] = array(
+      '#title' => $this->t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $this->getSetting('description'),
       '#weight' => -4,
     );
 

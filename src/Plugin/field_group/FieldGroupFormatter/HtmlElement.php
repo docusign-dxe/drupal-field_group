@@ -45,24 +45,43 @@ class HtmlElement extends FieldGroupFormatterBase {
 
     }
 
+    // Add the id to the attributes array.
+    if ($this->getSetting('id')) {
+      $element_attributes['id'] = $this->getSetting('id');
+    }
+
+    if (!isset($element_attributes['class'])) {
+      $element_attributes['class'] = array();
+    }
+
     // Add the classes to the attributes array.
     if ($this->getSetting('classes')) {
+      $element_attributes['class'][] = $this->getSetting('classes');
+    }
 
-      if (!isset($element_attributes['class'])) {
-        $element_attributes['class'] = array();
+    // Add speed and effect class.
+    $effect = $this->getSetting('effect');
+    if ($effect !== 'none') {
+      $element_attributes['class'][] = 'effect-' . $effect;
+
+      // Add jquery ui effects library.
+      if ($effect == 'blind') {
+        $element['#attached']['library'][] = 'core/jquery.ui.effects.blind';
       }
 
-      $element_attributes['class'][] = $this->getSetting('classes');
+      if ($this->getSetting('speed') !== 'none') {
+        $element_attributes['class'][] = 'speed-' . $this->getSetting('speed');
+      }
 
     }
 
-    $element['#prefix'] = '<' . $this->getSetting('element') . $element_attributes . '>';
+    $element['#type'] = 'field_group_html_element';
+    $element['#wrapper_element'] = $this->getSetting('element');
+    $element['#attributes'] = $element_attributes;
     if ($this->getSetting('show_label')) {
-      $element['#prefix'] .= '<' . $this->getSetting('label_element') . '><span>';
-      $element['#prefix'] .= SafeMarkup::checkPlain($this->t($group->label));
-      $element['#prefix'] .= '</span></' . $this->getSetting('label_element') . '>';
+      $element['#title_element'] = $this->getSetting('label_element');
+      $element['#title'] = SafeMarkup::checkPlain($this->t($this->getLabel()));
     }
-    $element['#suffix'] = '</' . $this->getSetting('element') . '>';
   }
 
   /**
@@ -101,6 +120,26 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#default_value' => $this->getSetting('attributes'),
       '#description' => $this->t('E.g. name="anchor"'),
       '#weight' => 4,
+    );
+
+    $form['effect'] = array(
+      '#title' => $this->t('Effect'),
+      '#type' => 'select',
+      '#options' => array(
+        'none' => $this->t('None'),
+        'collapsible' => $this->t('Collapsible'),
+        'blind' => $this->t('Blind')
+      ),
+      '#default_value' => $this->getSetting('effect'),
+      '#weight' => 5,
+    );
+
+    $form['speed'] = array(
+      '#title' => $this->t('Speed'),
+      '#type' => 'select',
+      '#options' => array('slow' => $this->t('Slow'), 'fast' => $this->t('Fast')),
+      '#default_value' => $this->getSetting('speed'),
+      '#weight' => 6,
     );
 
     return $form;
@@ -142,7 +181,9 @@ class HtmlElement extends FieldGroupFormatterBase {
     return array(
       'element' => 'div',
       'show_label' => 0,
-      'label_element' => 'div',
+      'label_element' => 'h3',
+      'effect' => 'none',
+      'speed' => 'fast',
       'attributes' => '',
       'required_fields' => 1,
     ) + parent::defaultSettings();
