@@ -39,8 +39,13 @@ class AccordionItem extends FieldGroupFormatterBase {
       '#collapsed' => $this->getSetting('formatter'),
       '#description' => $this->getSetting('description'),
       '#title' => \Drupal::translation()->translate($this->getLabel()),
-      '#attributes' => array('class' => explode(' ', trim($this->getSetting('classes')))),
     );
+
+    $classes = $this->getClasses();
+    if (!empty($classes)) {
+      $element += array('#attributes' => array('class' => $classes));
+    }
+
   }
 
   /**

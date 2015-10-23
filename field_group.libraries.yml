@@ -33,10 +33,10 @@ formatter.accordion:
     - field_group/core
     - core/jquery.ui.accordion
 
-formatter.div:
+formatter.html_element:
   version: VERSION
   js:
-    formatters/div/div.js: {}
+    formatters/html_element/html-element.js: {}
   dependencies:
     - field_group/core
 

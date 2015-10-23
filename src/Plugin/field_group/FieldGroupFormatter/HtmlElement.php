@@ -50,31 +50,21 @@ class HtmlElement extends FieldGroupFormatterBase {
       $element_attributes['id'] = $this->getSetting('id');
     }
 
-    if (!isset($element_attributes['class'])) {
-      $element_attributes['class'] = array();
-    }
-
     // Add the classes to the attributes array.
-    if ($this->getSetting('classes')) {
-      $element_attributes['class'][] = $this->getSetting('classes');
+    $classes = $this->getClasses();
+    if (!empty($classes)) {
+      if (!isset($element_attributes['class'])) {
+        $element_attributes['class'] = array();
+      }
+      // If user also entered class in the attributes textfield, force it to an array.
+      else {
+        $element_attributes['class'] = array($element_attributes['class']);
+      }
+      $element_attributes['class'] = array_merge($classes, $element_attributes['class']->value());
     }
 
-    // Add speed and effect class.
-    $effect = $this->getSetting('effect');
-    if ($effect !== 'none') {
-      $element_attributes['class'][] = 'effect-' . $effect;
-
-      // Add jquery ui effects library.
-      if ($effect == 'blind') {
-        $element['#attached']['library'][] = 'core/jquery.ui.effects.blind';
-      }
-
-      if ($this->getSetting('speed') !== 'none') {
-        $element_attributes['class'][] = 'speed-' . $this->getSetting('speed');
-      }
-
-    }
-
+    $element['#effect'] = $this->getSetting('effect');
+    $element['#speed'] = $this->getSetting('speed');
     $element['#type'] = 'field_group_html_element';
     $element['#wrapper_element'] = $this->getSetting('element');
     $element['#attributes'] = $element_attributes;
@@ -82,6 +72,9 @@ class HtmlElement extends FieldGroupFormatterBase {
       $element['#title_element'] = $this->getSetting('label_element');
       $element['#title'] = SafeMarkup::checkPlain($this->t($this->getLabel()));
     }
+
+    $form_state = new \Drupal\Core\Form\FormState();
+    \Drupal\field_group\Element\HtmlElement::processHtmlElement($element, $form_state);
   }
 
   /**

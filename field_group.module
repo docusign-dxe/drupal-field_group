@@ -176,8 +176,6 @@ function field_group_form_pre_render(&$element) {
  */
 function field_group_field_group_pre_render(&$element, &$group, &$rendering_object) {
 
-  field_group_pre_render_prepare($group);
-
   // Add all field_group format types to the js settings.
   $element['#attached']['drupalSettings']['field_group'] = array(
     $group->format_type => $group->mode,
@@ -445,21 +443,6 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
 }
 
 /**
- * Helper function to prepare basic variables needed for most formatters.
- *
- * Called in field_group_field_group_pre_render(), but can also be called in
- * other implementations of hook_field_group_pre_render().
- */
-function field_group_pre_render_prepare(&$group) {
-
-  $classes = _field_group_get_html_classes($group);
-
-  $group->classes = implode(' ', $classes->required);
-  $group->description = !empty($group->format_settings['instance_settings']['description']) ? Xss::filterAdmin(t($group->format_settings['instance_settings']['description'])) : '';
-
-}
-
-/**
  * Saves a group definition.
  * This function is called by ctools export when calls are made
  * through ctools_export_crud_save().
@@ -690,55 +673,6 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
 }
 
 /**
- * Implements field_group_pre_render_<format-type>.
- * Format type: Div.
- *
- * @param $element
- *   The field group render array.
- * @param $group
- *   The Field group object prepared for pre_render.
- * @param $rendering_object
- *   The entity / form beïng rendered.
- */
-function field_group_pre_render_div(&$element, $group, &$rendering_object) {
-
-  $show_label = isset($group->format_settings['show_label']) ? $group->format_settings['show_label'] : 0;
-  $label_element = isset($group->format_settings['label_element']) ? $group->format_settings['label_element'] : 'h2';
-  $effect = isset($group->format_settings['effect']) ? $group->format_settings['effect'] : 'none';
-
-  $element['#type'] = 'markup';
-  $id = isset($element['#id']) ? ' id="' . $element['#id'] . '"' : '';
-
-  if ($group->format_settings['formatter'] != 'open') {
-
-    $element['#prefix'] = '<div' . $id . ' class="' . $group->classes . '">
-      <' . $label_element . '><span class="field-group-format-toggler">' . SafeMarkup::checkPlain(t($group->label)) . '</span></' . $label_element . '>
-      <div class="field-group-format-wrapper" style="display: ' . (!empty($group->collapsed) ? 'none' : 'block') . ';">';
-    $element['#suffix'] = '</div></div>';
-
-    $element['#attached']['library'][] = 'field_group/formatter.div';
-
-    if ($effect == 'blind') {
-      $element['#attached']['library'][] = 'core/jquery.ui.effects.blind';
-    }
-
-  }
-  else {
-    $class_attribute = !empty($group->classes) ? ' class="' . $group->classes . '"' : '';
-
-    $element['#prefix'] = '<div' . $id . $class_attribute . '>';
-    if ($show_label) {
-      $element['#prefix'] .= '<' . $label_element . '><span>' . SafeMarkup::checkPlain(t($group->label)) . '</span></' . $label_element . '>';
-    }
-    $element['#suffix'] = '</div>';
-  }
-  if (!empty($group->description)) {
-    $element['#prefix'] .= '<div class="description">' . $group->description . '</div>';
-  }
-
-}
-
-/**
  * Prepares variables for horizontal tabs templates.
  *
  * Default template: horizontal-tabs.html.twig.
@@ -819,6 +753,7 @@ function template_preprocess_field_group_html_element(&$variables) {
     $variables['title'] = $element['#title'];
   }
 
+  $variables['collapsible'] = (!empty($element['#effect']) && $element['#effect'] !== 'none');
   $variables['wrapper_element'] = $element['#wrapper_element'];
   $variables['attributes'] = $element['#attributes'];
   $variables['children'] = (!empty($element['#children'])) ? $element['#children'] : '';

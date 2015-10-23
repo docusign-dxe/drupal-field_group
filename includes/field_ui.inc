@@ -782,7 +782,7 @@ function field_group_field_ui_clone_field_groups_validate($form, FormStateInterf
     $non_existing_types = array('multipage', 'multipage-group');
   }
   else {
-    $non_existing_types = array('div');
+    $non_existing_types = array('html_element');
   }
 
   foreach ($source_groups as $key => $group) {

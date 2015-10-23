@@ -10,7 +10,6 @@ namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\SafeMarkup;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -43,9 +42,10 @@ class Details extends FieldGroupFormatterBase {
       $element['#id'] = Html::getId($this->getSetting('id'));
     }
 
-    if ($this->getSetting('classes')) {
+    $classes = $this->getClasses();
+    if (!empty($classes)) {
       $element += array(
-        '#attributes' => array('class' => explode(' ', $this->getSetting('classes'))),
+        '#attributes' => array('class' => $classes),
       );
     }
 

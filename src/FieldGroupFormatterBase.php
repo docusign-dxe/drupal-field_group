@@ -148,4 +148,22 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
     );
   }
 
+  /**
+   * Get the classes to add to the group.
+   */
+  protected function getClasses() {
+
+    $classes = array();
+    // Add a required-fields class to trigger the js.
+    if ($this->getSetting('required_fields')) {
+      $classes[] = 'required-fields';
+    }
+
+    if ($this->getSetting('classes')) {
+      $classes = array_merge($classes, explode(' ', trim($this->getSetting('classes'))));
+    }
+
+    return $classes;
+  }
+
 }

@@ -3,17 +3,17 @@
 /**
  * Implements Drupal.FieldGroup.processHook().
  */
-Drupal.FieldGroup.Effects.processDiv = {
+Drupal.FieldGroup.Effects.processHtml_element = {
   execute: function (context, settings, type) {
 
-    $('div.collapsible', context).once('fieldgroup-effects', function() {
+    $('.fieldgroup-collapsible', context).once('fieldgroup-effects').each(function() {
       var $wrapper = $(this);
 
       // Turn the legend into a clickable link, but retain span.field-group-format-toggler
       // for CSS positioning.
 
-      var $toggler = $('span.field-group-format-toggler:first', $wrapper);
-      var $link = $('<a class="field-group-format-title" href="#"></a>');
+      var $toggler = $('.field-group-toggler:first', $wrapper);
+      var $link = $('<a class="field-group-title" href="#"></a>');
       $link.prepend($toggler.contents());
 
       // Add required field markers if needed
@@ -31,13 +31,13 @@ Drupal.FieldGroup.Effects.processDiv = {
           wrapper.animating = true;
           var speed = $wrapper.hasClass('speed-fast') ? 300 : 1000;
           if ($wrapper.hasClass('effect-none') && $wrapper.hasClass('speed-none')) {
-            $('> .field-group-format-wrapper', wrapper).toggle();
+            $('> .field-group-wrapper', wrapper).toggle();
           }
           else if ($wrapper.hasClass('effect-blind')) {
-            $('> .field-group-format-wrapper', wrapper).toggle('blind', {}, speed);
+            $('> .field-group-wrapper', wrapper).toggle('blind', {}, speed);
           }
           else {
-            $('> .field-group-format-wrapper', wrapper).toggle(speed);
+            $('> .field-group-wrapper', wrapper).toggle(speed);
           }
           wrapper.animating = false;
         }

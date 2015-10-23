@@ -41,8 +41,11 @@ class Tab extends FieldGroupFormatterBase {
       '#description' => $this->getSetting('description'),
     );
 
-    if ($this->getSetting('classes')) {
-      $element['#attributes']['class'] = explode(' ', $this->getSetting('classes'));
+    $classes = $this->getClasses();
+    if (!empty($classes)) {
+      $element += array(
+        '#attributes' => array('class' => $classes),
+      );
     }
 
     if ($this->getSetting('formatter') == 'open') {

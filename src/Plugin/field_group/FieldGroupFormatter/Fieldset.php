@@ -46,8 +46,9 @@ class Fieldset extends FieldGroupFormatterBase {
       $element['#id'] = drupal_html_id($this->getSetting('id'));
     }
 
-    if ($this->getSetting('classes')) {
-      $element['#attributes'] += array('class' => explode(' ', $this->getSetting('classes')));
+    $classes = $this->getClasses();
+    if (!empty($classes)) {
+      $element += array('#attributes' => array('class' => $classes));
     }
   }
 

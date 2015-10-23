@@ -31,7 +31,7 @@ class Tabs extends FieldGroupFormatterBase {
   public function preRender(&$element) {
 
     $element += array(
-      '#prefix' => '<div class="field-group-' . $this->group->format_type . '-wrapper ' . $this->group->classes . '">',
+      '#prefix' => '<div class=" ' . implode(' ' , $this->getClasses()) . '">',
       '#suffix' => '</div>',
       '#tree' => TRUE,
       '#parents' => array($this->group->group_name),
@@ -118,6 +118,17 @@ class Tabs extends FieldGroupFormatterBase {
     return array(
       'direction' => 'vertical',
     ) + parent::defaultSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getClasses() {
+
+    $classes = parent::getClasses();
+    $classes[] = 'field-group-' . $this->group->format_type . '-wrapper';
+
+    return $classes;
   }
 
 }
