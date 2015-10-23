@@ -26,14 +26,11 @@ use Drupal\field_ui\Form\EntityDisplayFormBase;
  */
 function field_group_field_ui_form_params($form, \Drupal\Core\Entity\EntityDisplayBase $display) {
   $entity_type_definition = \Drupal::entityManager()->getDefinition($form['#entity_type']);
-  $admin_url = new Url($entity_type_definition->get('field_ui_base_route'), array(
-    $entity_type_definition->getBundleEntityType() => $form['#bundle'],
-  ));
 
   $params = new stdClass();
   $params->entity_type = $display->getTargetEntityTypeId();
   $params->bundle = $display->getTargetBundle();
-  $params->admin_path = $admin_url->toString();
+  $params->route_parameters = Drupal\field_ui\FieldUI::getRouteBundleParameter($entity_type_definition, $form['#bundle']);
   $params->region_callback = 'field_group_display_overview_row_region';
   $params->mode = $display->getMode();
   $params->context = field_group_get_context_from_display($display);
@@ -284,10 +281,9 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
       $entity_type_id = $entity_type_definition->id();
       $admin_url = new Url(
         'field_ui.field_group_delete_' . $entity_type_id,
-        array(
-          $entity_type_definition->getBundleEntityType() => $form['#bundle'],
+        array_merge($params->route_parameters, array(
           'field_group' => $config_name_suffix,
-        )
+        ))
       );
 
       $table[$name]['settings_edit']['#suffix'] .= Drupal::l(t('delete'), $admin_url);
