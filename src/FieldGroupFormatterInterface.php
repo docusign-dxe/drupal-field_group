@@ -50,9 +50,12 @@ interface FieldGroupFormatterInterface extends PluginInspectionInterface {
   /**
    * Defines the default settings for this plugin.
    *
+   * @param string $context
+   *   The context to get the default settings for.
+   *
    * @return array
    *   A list of default settings, keyed by the setting name.
    */
-  public static function defaultSettings();
+  public static function defaultContextSettings($context);
 
 }

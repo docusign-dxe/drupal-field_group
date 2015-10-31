@@ -173,16 +173,22 @@ class HtmlElement extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return array(
+  public static function defaultContextSettings($context) {
+    $defaults = array(
       'element' => 'div',
       'show_label' => 0,
       'label_element' => 'h3',
       'effect' => 'none',
       'speed' => 'fast',
       'attributes' => '',
-      'required_fields' => 1,
-    ) + parent::defaultSettings();
+    ) + parent::defaultSettings($context);
+
+    if ($context == 'form') {
+      $defaults['required_fields'] = 1;
+    }
+
+    return $defaults;
+
   }
 
 }

@@ -118,10 +118,10 @@ class Tabs extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultContextSettings($context) {
     return array(
       'direction' => 'vertical',
-    ) + parent::defaultSettings();
+    ) + parent::defaultContextSettings($context);
   }
 
   /**

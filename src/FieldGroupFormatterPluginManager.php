@@ -80,7 +80,7 @@ class FieldGroupFormatterPluginManager extends DefaultPluginManager {
 
     // Fill in default configuration if needed.
     if (!isset($options['prepare']) || $options['prepare'] == TRUE) {
-      $configuration = $this->prepareConfiguration($format_type, $configuration);
+      $configuration = $this->prepareConfiguration($format_type, $context, $configuration);
     }
 
     $plugin_id = $format_type;
@@ -103,13 +103,15 @@ class FieldGroupFormatterPluginManager extends DefaultPluginManager {
    *
    * @param string $format_type
    *   The format type
+   * @param string $context
+   *   The context to prepare configuration for.
    * @param array $properties
    *   An array of formatter configuration.
    *
    * @return array
    *   The display properties with defaults added.
    */
-  public function prepareConfiguration($format_type, array $configuration) {
+  public function prepareConfiguration($format_type, $context, array $configuration) {
     // Fill in defaults for missing properties.
     $configuration += array(
       'label' => '',
@@ -117,7 +119,7 @@ class FieldGroupFormatterPluginManager extends DefaultPluginManager {
     );
 
     // Fill in default settings values for the formatter.
-    $configuration['settings'] += $this->getDefaultSettings($format_type);
+    $configuration['settings'] += $this->getDefaultSettings($format_type, $context);
 
     return $configuration;
   }
@@ -127,16 +129,18 @@ class FieldGroupFormatterPluginManager extends DefaultPluginManager {
    *
    * @param string $type
    *   A formatter type name.
+   * @param string $context
+   *   The context to get default values for.
    *
    * @return array
    *   The formatter type's default settings, as provided by the plugin
    *   definition, or an empty array if type or settings are undefined.
    */
-  public function getDefaultSettings($type) {
+  public function getDefaultSettings($type, $context) {
     $plugin_definition = $this->getDefinition($type, FALSE);
     if (!empty($plugin_definition['class'])) {
       $plugin_class = DefaultFactory::getPluginClass($type, $plugin_definition);
-      return $plugin_class::defaultSettings();
+      return $plugin_class::defaultContextSettings($context);
     }
     return array();
   }

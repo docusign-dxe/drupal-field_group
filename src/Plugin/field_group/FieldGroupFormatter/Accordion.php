@@ -84,10 +84,10 @@ class Accordion extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultContextSettings($context) {
     return array(
       'effect' => 'none',
-    ) + parent::defaultSettings();
+    ) + parent::defaultSettings($context);
   }
 
 }

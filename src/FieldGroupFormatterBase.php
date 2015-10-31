@@ -142,6 +142,13 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
    * {@inheritdoc}
    */
   public static function defaultSettings() {
+    return self::defaultContextSettings('view');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultContextSettings($context) {
     return array(
       'classes' => '',
       'id' => '',

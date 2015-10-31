@@ -27,6 +27,9 @@ field_group.field_group_formatter_plugin.details:
     open:
       type: boolean
       label: 'Display element open by default.'
+    required_fields:
+      type: boolean
+      label: 'Mark for required fields'
 
 field_group.field_group_formatter_plugin.fieldset:
   type: field_group.field_group_formatter_plugin.base

@@ -68,6 +68,15 @@ class Details extends FieldGroupFormatterBase {
       '#default_value' => $this->getSetting('open'),
     );
 
+    if ($this->context == 'form') {
+      $form['required_fields'] = array(
+        '#type' => 'checkbox',
+        '#title' => $this->t('Mark group as required if it contains required fields.'),
+        '#default_value' => $this->getSetting('required_fields'),
+        '#weight' => 2,
+      );
+    }
+
     return $form;
   }
 
@@ -84,16 +93,27 @@ class Details extends FieldGroupFormatterBase {
       $summary[] = $this->t('Default state closed');
     }
 
+    if ($this->getSetting('required_fields')) {
+      $summary[] = $this->t('Mark as required');
+    }
+
     return $summary;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return array(
+  public static function defaultContextSettings($context) {
+    $defaults = array(
       'open' => FALSE,
-    ) + parent::defaultSettings();
+      'required_fields' => $context == 'form',
+    ) + parent::defaultSettings($context);
+
+    if ($context == 'form') {
+      $defaults['required_fields'] = 1;
+    }
+
+    return $defaults;
   }
 
 }

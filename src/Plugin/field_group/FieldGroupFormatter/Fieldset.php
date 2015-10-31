@@ -95,11 +95,16 @@ class Fieldset extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return array(
+  public static function defaultContextSettings($context) {
+    $defaults = array(
       'description' => '',
-      'required_fields' => 1,
-    ) + parent::defaultSettings();
+    ) + parent::defaultSettings($context);
+
+    if ($context == 'form') {
+      $defaults['required_fields'] = 1;
+    }
+
+    return $defaults;
   }
 
 }
