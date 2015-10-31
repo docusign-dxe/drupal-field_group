@@ -8,6 +8,7 @@
 namespace Drupal\field_group\Tests;
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -37,7 +38,7 @@ class ManageDisplayTest extends WebTestBase {
     // Create content type, with underscores.
     $type_name =  Unicode::strtolower($this->randomMachineName(8)) . '_test';
     $type = $this->drupalCreateContentType(array('name' => $type_name, 'type' => $type_name));
-    $this->type = $type->type;
+    $this->type = $type->id();
 
   }
 
