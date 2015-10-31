@@ -7,7 +7,8 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal\Component\Utility\SafeMarkup;
+use Drupal;
+use Drupal\Component\Utility\Html;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -38,8 +39,12 @@ class AccordionItem extends FieldGroupFormatterBase {
       '#type' => 'field_group_accordion_item',
       '#collapsed' => $this->getSetting('formatter'),
       '#description' => $this->getSetting('description'),
-      '#title' => \Drupal::translation()->translate($this->getLabel()),
+      '#title' => Drupal::translation()->translate($this->getLabel()),
     );
+
+    if ($this->getSetting('id')) {
+      $element['#id'] = Html::getId($this->getSetting('id'));
+    }
 
     $classes = $this->getClasses();
     if (!empty($classes)) {

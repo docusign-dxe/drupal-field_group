@@ -38,6 +38,15 @@ class Tabs extends FieldGroupFormatterBase {
       '#default_tab' => '',
     );
 
+    if ($this->getSetting('id')) {
+      $element['#id'] = Html::getId($this->getSetting('id'));
+    }
+
+    // By default tabs don't have titles but you can override it in the theme.
+    if ($this->getLabel()) {
+      $element['#title'] = SafeMarkup::checkPlain($this->getLabel());
+    }
+
     $form_state = new \Drupal\Core\Form\FormState();
 
     if ($this->getSetting('direction') == 'vertical') {
@@ -61,11 +70,6 @@ class Tabs extends FieldGroupFormatterBase {
     // Skipping this would force us to move all child groups to this array, making it an un-nestable.
     $element['group']['#groups'][$this->group->group_name] = array(0 => array());
     $element['group']['#groups'][$this->group->group_name]['#group_exists'] = TRUE;
-
-    // By default tabs don't have titles but you can override it in the theme.
-    if ($this->getLabel()) {
-      $element['#title'] = SafeMarkup::checkPlain($this->getLabel());
-    }
 
     // Search for a tab that was marked as open. First one wins.
     foreach (\Drupal\Core\Render\Element::children($element) as $tab_name) {

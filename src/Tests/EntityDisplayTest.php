@@ -129,8 +129,6 @@ class EntityDisplayTest extends WebTestBase {
     );
     $group = $this->createGroup('node', $this->type, 'view', 'default', $data);
 
-    $this->drupalGet('admin/structure/types/manage/' . $this->type . '/display');
-
     //$groups = field_group_info_groups('node', 'article', 'view', 'default', TRUE);
     $this->drupalGet('node/' . $this->node->id());
 
@@ -157,6 +155,35 @@ class EntityDisplayTest extends WebTestBase {
     $this->drupalGet('node/' . $this->node->id());
     $this->assertFieldByXPath("//div[contains(@class, 'speed-fast')]", NULL, t('Speed class is set'));
     $this->assertFieldByXPath("//div[contains(@class, 'effect-blink')]", NULL, t('Effect class is set'));
+  }
+
+  /**
+   * Test the fieldset formatter.
+   */
+  function testFieldset() {
+
+    $data = array(
+      'weight' => '1',
+      'children' => array(
+        0 => 'field_test',
+        1 => 'body',
+      ),
+      'label' => 'Test Fieldset',
+      'format_type' => 'fieldset',
+      'format_settings' => array(
+        'id' => 'fieldset-id',
+        'classes' => 'test-class',
+        'description' => 'test description',
+      ),
+    );
+    $group = $this->createGroup('node', $this->type, 'view', 'default', $data);
+
+    $this->drupalGet('node/' . $this->node->id());
+
+    // Test group ids and classes.
+    $this->assertFieldByXPath("//fieldset[contains(@id, 'fieldset-id')]", NULL, t('Correct id set on the fieldset'));
+    $this->assertFieldByXPath("//fieldset[contains(@class, 'test-class')]", NULL, t('Test class set on the fieldset'));
+
   }
 
   /**
@@ -290,7 +317,7 @@ class EntityDisplayTest extends WebTestBase {
       ),
     );
     $accordion = $this->createGroup('node', $this->type, 'view', 'default', $data);
-    $this->drupalGet('admin/structure/types/manage/' . $this->type . '/display');
+
     $this->drupalGet('node/' . $this->node->id());
 
     // Test properties.

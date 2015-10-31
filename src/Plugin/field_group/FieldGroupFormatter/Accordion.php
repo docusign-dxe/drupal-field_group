@@ -7,6 +7,8 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormState;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -29,12 +31,16 @@ class Accordion extends FieldGroupFormatterBase {
    */
   public function preRender(&$element) {
 
-    $form_state = new \Drupal\Core\Form\FormState();
+    $form_state = new FormState();
 
     $element += array(
       '#type' => 'field_group_accordion',
       '#effect' => $this->getSetting('effect'),
     );
+
+    if ($this->getSetting('id')) {
+      $element['#id'] = Html::getId($this->getSetting('id'));
+    }
 
     $classes = $this->getClasses();
     if (!empty($classes)) {

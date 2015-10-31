@@ -7,7 +7,10 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Core\Form\FormState;
+use Drupal\Core\Template\Attribute;
 use Drupal\field_group\FieldGroupFormatterBase;
 
 /**
@@ -30,7 +33,7 @@ class HtmlElement extends FieldGroupFormatterBase {
    */
   public function preRender(&$element) {
 
-    $element_attributes = new \Drupal\Core\Template\Attribute();
+    $element_attributes = new Attribute();
 
     if ($this->getSetting('attributes')) {
 
@@ -47,7 +50,7 @@ class HtmlElement extends FieldGroupFormatterBase {
 
     // Add the id to the attributes array.
     if ($this->getSetting('id')) {
-      $element_attributes['id'] = $this->getSetting('id');
+      $element_attributes['id'] = Html::getId($this->getSetting('id'));
     }
 
     // Add the classes to the attributes array.
@@ -73,7 +76,7 @@ class HtmlElement extends FieldGroupFormatterBase {
       $element['#title'] = SafeMarkup::checkPlain($this->t($this->getLabel()));
     }
 
-    $form_state = new \Drupal\Core\Form\FormState();
+    $form_state = new FormState();
     \Drupal\field_group\Element\HtmlElement::processHtmlElement($element, $form_state);
   }
 

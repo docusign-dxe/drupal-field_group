@@ -7,6 +7,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\SafeMarkup;
 use Drupal\field_group\FieldGroupFormatterBase;
 
@@ -29,11 +30,11 @@ class Fieldset extends FieldGroupFormatterBase {
    * {@inheritdoc}
    */
   public function preRender(&$element) {
+
     $element += array(
       '#type' => 'fieldset',
       '#title' => SafeMarkup::checkPlain($this->t($this->getLabel())),
       '#pre_render' => array(),
-      '#attributes' => array(),
     );
 
     if ($this->getSetting('description')) {
@@ -43,7 +44,7 @@ class Fieldset extends FieldGroupFormatterBase {
     }
 
     if ($this->getSetting('id')) {
-      $element['#id'] = drupal_html_id($this->getSetting('id'));
+      $element['#id'] = Html::getId($this->getSetting('id'));
     }
 
     $classes = $this->getClasses();

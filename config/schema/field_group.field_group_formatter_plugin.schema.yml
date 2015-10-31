@@ -32,14 +32,9 @@ field_group.field_group_formatter_plugin.fieldset:
   type: field_group.field_group_formatter_plugin.base
   label: 'Mapping for the fieldset formatter settings'
   mapping:
-    required_fields:
-      type: boolean
-      label: 'Mark for required fields'
-
-field_group.field_group_formatter_plugin.fieldset:
-  type: field_group.field_group_formatter_plugin.base
-  label: 'Mapping for the fieldset formatter settings'
-  mapping:
+    description:
+      type: string
+      label: 'description of the item'
     required_fields:
       type: boolean
       label: 'Mark for required fields'
