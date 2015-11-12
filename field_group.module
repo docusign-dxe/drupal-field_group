@@ -284,13 +284,18 @@ function field_group_attach_groups(&$element, $context) {
  * @return $element Array with re-arranged fields in groups.
  */
 function field_group_build_entity_groups(&$vars, $context = 'view') {
-
   if ($context == 'form') {
     $element = &$vars;
     $nest_vars = NULL;
   }
   else {
-    $element = &$vars['elements'];
+    if (isset($vars['elements'])) {
+      $element = &$vars['elements'];
+    }
+    elseif (isset($vars['content'])) {
+      $element = &$vars['content'];
+    }
+
     $nest_vars = &$vars;
   }
 
