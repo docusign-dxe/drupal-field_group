@@ -29,7 +29,7 @@ class Fieldset extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element) {
+  public function preRender(&$element, $rendering_object) {
 
     $element += array(
       '#type' => 'fieldset',

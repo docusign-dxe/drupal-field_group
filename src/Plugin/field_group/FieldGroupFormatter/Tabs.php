@@ -28,7 +28,7 @@ class Tabs extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element) {
+  public function preRender(&$element, $rendering_object) {
 
     $element += array(
       '#prefix' => '<div class=" ' . implode(' ' , $this->getClasses()) . '">',

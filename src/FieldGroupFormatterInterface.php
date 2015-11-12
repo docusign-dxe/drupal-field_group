@@ -21,8 +21,10 @@ interface FieldGroupFormatterInterface extends PluginInspectionInterface {
    *
    * @param array $element
    *   The field group render array.
+   * @param object $rendering_object
+   *   The object / entity beïng rendered.
    */
-  public function preRender(&$element);
+  public function preRender(&$element, $rendering_object);
 
   /**
    * Returns a form to configure settings for the formatter.

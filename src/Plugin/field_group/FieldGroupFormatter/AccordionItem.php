@@ -33,7 +33,7 @@ class AccordionItem extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element) {
+  public function preRender(&$element, $rendering_object) {
 
     $element += array(
       '#type' => 'field_group_accordion_item',

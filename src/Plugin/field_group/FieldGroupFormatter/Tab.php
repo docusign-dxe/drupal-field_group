@@ -33,7 +33,7 @@ class Tab extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element) {
+  public function preRender(&$element, $rendering_object) {
 
     $add = array(
       '#type' => 'details',
