@@ -17,7 +17,6 @@ core:
     js/field_group.js: {}
   css:
     theme:
-      css/field_group-rtl.css: {}
       css/field_group.css: {}
   dependencies:
     - core/jquery
