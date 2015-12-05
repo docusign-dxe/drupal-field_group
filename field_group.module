@@ -160,7 +160,7 @@ function field_group_entity_display_build_alter(&$element, $context) {
  * @see field_group_field_attach_form
  * @param $element Form that is being rendered.
  */
-function field_group_form_pre_render(&$element) {
+function field_group_form_pre_render($element) {
   if (empty($element['#field_group_form_pre_render'])) {
     $element['#field_group_form_pre_render'] = TRUE;
     field_group_build_entity_groups($element, 'form');
