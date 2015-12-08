@@ -35,6 +35,7 @@ class Fieldset extends FieldGroupFormatterBase {
       '#type' => 'fieldset',
       '#title' => SafeMarkup::checkPlain($this->t($this->getLabel())),
       '#pre_render' => array(),
+      '#attributes' => array(),
     );
 
     if ($this->getSetting('description')) {
@@ -49,7 +50,7 @@ class Fieldset extends FieldGroupFormatterBase {
 
     $classes = $this->getClasses();
     if (!empty($classes)) {
-      $element += array('#attributes' => array('class' => $classes));
+      $element['#attributes'] += array('class' => $classes);
     }
   }
 
