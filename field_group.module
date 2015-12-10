@@ -29,14 +29,9 @@ function field_group_theme_registry_alter(&$theme_registry) {
     }
   }
 
-  foreach ($entity_types as $entity_type) {
-    if (isset($theme_registry[$entity_type])) {
-      $theme_registry[$entity_type]['preprocess functions'][] = 'field_group_build_entity_groups';
-      // DS support, make sure it comes after field_group.
-      if ($key = array_search('ds_preprocess_ds_layout', $theme_registry[$entity_type]['preprocess functions'])) {
-        unset($theme_registry[$entity_type]['preprocess functions'][$key]);
-        $theme_registry[$entity_type]['preprocess functions'][] = 'ds_preprocess_ds_layout';
-      }
+  foreach ($theme_registry as $theme_hook => $info) {
+    if (in_array($theme_hook, $entity_types) || (!empty($info['base hook']) && in_array($info['base hook'], $entity_types))) {
+      $theme_registry[$theme_hook]['preprocess functions'][] = 'field_group_build_entity_groups';
     }
   }
 
