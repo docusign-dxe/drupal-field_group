@@ -322,10 +322,6 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
   if ($form['#fieldgroups']) {
 
     $parent_requirements = array(
-      'multipage' => array(
-        'parent' => 'multipage-group',
-        'message' => 'Each Multipage element needs to have a parent Multipage group element.',
-      ),
       'accordion-item' => array(
         'parent' => 'accordion',
         'message' => 'Each Accordion item element needs to have a parent Accordion group element.',
@@ -775,10 +771,10 @@ function field_group_field_ui_clone_field_groups_validate($form, FormStateInterf
 
   // Check for types are not known in current mode.
   if ($field_group_params->context != 'form') {
-    $non_existing_types = array('multipage', 'multipage-group');
+    $non_existing_types = [];
   }
   else {
-    $non_existing_types = array('html_element');
+    $non_existing_types = ['html_element'];
   }
 
   foreach ($source_groups as $key => $group) {
