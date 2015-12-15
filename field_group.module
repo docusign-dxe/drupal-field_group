@@ -5,13 +5,13 @@
  * Allows administrators to attach custom fields to fieldable types.
  */
 
-use Drupal\Component\Utility\Xss;
-use Drupal\Component\Utility\SafeMarkup;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\ContentEntityFormInterface;
+use Drupal\Core\Entity\Display\EntityDisplayInterface;
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 
 require_once __DIR__ . '/includes/helpers.inc';
 
@@ -98,26 +98,13 @@ function field_group_field_info_max_weight($entity_type, $bundle, $context, $con
 }
 
 /**
- * Implements hook_field_attach_form().
- *
- * @todo Refactored in field_group_form_alter().
- * Remove this function afterwards. Decision has to be made about using
- * a pre_render callback or doing the nesting logic immediately in the alter.
- */
-function field_group_field_attach_form($entity_type, $entity, &$form, FormStateInterface $form_state, $langcode) {
-  $form['#attached']['library'][] = 'field_group/field_ui';
-  field_group_attach_groups($form, 'form', $form_state);
-  $form['#pre_render'][] = 'field_group_form_pre_render';
-}
-
-/**
  * Implements hook_form_alter().
  */
 function field_group_form_alter(array &$form, FormStateInterface $form_state) {
   if ($form_state->getFormObject() instanceof ContentEntityFormInterface) {
 
     /**
-     * @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display
+     * @var EntityFormDisplayInterface $form_display
      */
     $form_display = $form_state->getStorage()['form_display'];
     $entity = $form_state->getFormObject()->getEntity();
@@ -183,19 +170,13 @@ function field_group_field_group_pre_render(&$element, &$group, &$rendering_obje
   $element['#weight'] = $group->weight;
 
   // Call the pre render function for the format type.
-  $function = "field_group_pre_render_" . str_replace("-", "_", $group->format_type);
-  if (function_exists($function)) {
-    $function($element, $group, $rendering_object);
-  }
-  else {
-    $manager = \Drupal::service('plugin.manager.field_group.formatters');
-    $plugin = $manager->getInstance(array(
-      'format_type' => $group->format_type,
-      'configuration' => array('label' => $group->label, 'settings' => $group->format_settings),
-      'group' => $group,
-    ));
-    $plugin->preRender($element, $rendering_object);
-  }
+  $manager = Drupal::service('plugin.manager.field_group.formatters');
+  $plugin = $manager->getInstance(array(
+    'format_type' => $group->format_type,
+    'configuration' => array('label' => $group->label, 'settings' => $group->format_settings),
+    'group' => $group,
+  ));
+  $plugin->preRender($element, $rendering_object);
 
 }
 
@@ -438,7 +419,7 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
  *
  * @param $group
  *   A group definition.
- * @return \Drupal\Core\Entity\Display\EntityDisplayInterface || NULL
+ * @return EntityDisplayInterface || NULL
  */
 function field_group_group_save($group) {
   if ($group->context == 'form') {
@@ -537,7 +518,7 @@ function field_group_info_groups($entity_type, $bundle, $context, $mode) {
  *   The name of the group.
  * @param $entity_type
  *   The name of the entity.
- * @param $bundle_name
+ * @param $bundle
  *   The name of the bundle.
  * @param $context
  *   The context of the view mode (form or view)
