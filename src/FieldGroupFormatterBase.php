@@ -110,8 +110,6 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
       '#element_validate' => array('field_group_validate_css_class'),
     );
 
-    $form['#validate'] = array('field_group_format_settings_form_validate');
-
     return $form;
 
   }

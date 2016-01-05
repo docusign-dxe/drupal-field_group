@@ -91,21 +91,12 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
   $form_state_values = $form_state->getValues();
   $field_group_form_state = $form_state->get('field_group');
 
-  // Add a region for 'add_new' rows, but only when fields are
-  // available and thus regions.
-  if (isset($table['#regions'])) {
-    $table['#regions'] += array(
-      'add_new' => array(
-        'rows_order' => array('_add_new_group'),
-      ),
-    );
-  }
+  $table['#parent_options'] = [];
 
   // Extend available parenting options.
   foreach ($params->groups as $name => $group) {
     $table['#parent_options'][$name] = $group->label;
   }
-  $table['#parent_options']['_add_new_group'] = t('Add new group');
 
   // Update existing rows accordingly to the parents.
   foreach (Element::children($table) as $name) {
@@ -295,24 +286,9 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
 
   // Additional row: add new group.
   $parent_options = $table['#parent_options'];
-  unset($parent_options['_add_new_group']);
-  $table['_add_new_group'] = field_group_add_row('_add_new_group', $parent_options, $params);
-
-  $table['_add_new_group'] += array(
-    'format' => array(
-      'type' => array(
-        '#type' => 'select',
-        '#options' => $formatter_options,
-        '#default_value' => 'fieldset',
-        '#prefix' => '<div class="add-new-placeholder">&nbsp;</div>',
-      ),
-      '#cell_attributes' => array('colspan' => 3),
-    ),
-  );
 
   $form['#attached']['library'][] = 'field_group/field_ui';
 
-  $form['#validate'][] = 'field_group_field_overview_validate';
   $form['actions']['submit']['#submit'][] = 'field_group_field_overview_submit';
 
   // Create the settings for fieldgroup as vertical tabs (merged with DS).
@@ -345,91 +321,6 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
       }
     }
   }
-}
-
-/**
- * Return an array of field_group_formatter options.
- */
-function field_group_field_formatter_options($type) {
-  $options = &drupal_static(__FUNCTION__);
-
-  if (!isset($options)) {
-    $options = array();
-
-    $manager = \Drupal::service('plugin.manager.field_group.formatters');
-    $formatters = $manager->getDefinitions();
-
-    foreach ($formatters as $formatter) {
-      if (in_array($type, $formatter['supported_contexts'])) {
-        $options[$formatter['id']] = $formatter['label'];
-      }
-    }
-  }
-
-  return $options;
-}
-
-/**
- * Helper function to add a row in the overview forms.
- */
-function field_group_add_row($name, $parent_options, $params) {
-
-  $display = entity_get_display($params->entity_type, $params->bundle, $params->mode);
-
-  return array(
-    '#attributes' => array('class' => array('draggable', 'field-group', 'add-new')),
-    '#row_type' => 'add_new_group',
-    '#js_settings' => array('rowHandler' => 'group'),
-    '#region_callback' => $params->region_callback,
-    'label' => array(
-      '#title_display' => 'invisible',
-      '#title' => t('Label for new group'),
-      '#type' => 'textfield',
-      '#size' => 15,
-      '#description' => t('Label'),
-      '#prefix' => '<div class="label-input"><div class="add-new-placeholder">' . t('Add new group') . '</div>',
-      '#suffix' => '</div>',
-    ),
-    'weight' => array(
-      '#type' => 'textfield',
-      '#default_value' => $display->getHighestWeight() + 3,
-      '#size' => 3,
-      '#title_display' => 'invisible',
-      '#title' => t('Weight for new group'),
-      '#attributes' => array('class' => array('field-weight')),
-      '#prefix' => '<div class="add-new-placeholder">&nbsp;</div>',
-    ),
-    'parent_wrapper' => array(
-      'parent' => array(
-        '#title_display' => 'invisible',
-        '#title' => t('Parent for new group'),
-        '#type' => 'select',
-        '#options' => $parent_options,
-        '#empty_value' => '',
-        '#attributes' => array('class' => array('field-parent')),
-        '#prefix' => '<div class="add-new-placeholder">&nbsp;</div>',
-        '#parents' => array('fields', $name, 'parent'),
-      ),
-      'hidden_name' => array(
-        '#type' => 'hidden',
-        '#default_value' => $name,
-        '#attributes' => array('class' => array('field-name')),
-      ),
-    ),
-    'group_name' => array(
-      '#type' => 'textfield',
-      '#title_display' => 'invisible',
-      '#title' => t('Machine name for new group'),
-      // This field should stay LTR even for RTL languages.
-      '#field_prefix' => 'group_',
-      '#field_suffix' => '',
-      '#attributes' => array('dir' => 'ltr'),
-      '#size' => 15,
-      '#description' => t('Group name (a-z, 0-9, _)'),
-      '#prefix' => '<div class="add-new-placeholder">&nbsp;</div>',
-      '#cell_attributes' => array('colspan' => 1),
-    ),
-  );
 }
 
 /**
@@ -499,60 +390,6 @@ function field_group_display_overview_row_region($row) {
   switch ($row['#row_type']) {
     case 'group':
       return ($row['format']['type']['#value'] == 'hidden' ? 'hidden' : 'content');
-    case 'add_new_group':
-      // If no input in 'label', assume the row has not been dragged out of the
-      // 'add new' section.
-      if (empty($row['label']['#value'])) {
-        return 'add_new';
-      }
-      return ($row['format']['type']['#value'] == 'hidden' ? 'hidden' : 'content');
-  }
-}
-
-/**
- * Validate handler for the overview screens.
- * @param Array $form The complete form.
- * @param FormStateInterface $form_state The state of the form.
- */
-function field_group_field_overview_validate($form, FormStateInterface $form_state) {
-  $form_values = $form_state->getValue('fields');
-  $entity_type = $form['#context']->get('targetEntityType');
-  $bundle = $form['#context']->get('bundle');
-  $context = field_group_get_context_from_display($form['#context']);
-  $mode = $form['#context']->get('mode');
-
-  $group = $form_values['_add_new_group'];
-
-  // Validate if any information was provided in the 'add new group' row.
-  if (array_filter(array($group['label'], $group['group_name']))) {
-
-    // Missing group name.
-    if (!$group['group_name']) {
-      $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: you need to provide a group name.'));
-    }
-    // Group name validation.
-    else {
-      $group_name = $group['group_name'];
-
-      // Add the 'group_' prefix.
-      if (Unicode::substr($group_name, 0, 6) != 'group_') {
-        $group_name = 'group_' . $group_name;
-        $form_state->setValueForElement($form['fields']['_add_new_group']['group_name'], $group_name);
-      }
-
-      // Invalid group name.
-      if (!preg_match('!^group_[a-z0-9_]+$!', $group_name)) {
-        $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: the group name %group_name is invalid. The name must include only lowercase unaccentuated letters, numbers, and underscores.', array('%group_name' => $group_name)));
-      }
-      if (Unicode::strlen($group_name) > 32) {
-        $form_state->setErrorByName('fields][_add_new_group][group_name', t("Add new group: the group name %group_name is too long. The name is limited to 32 characters, including the 'group_' prefix.", array('%group_name' => $group_name)));
-      }
-
-      // Group name already exists.
-      if (field_group_exists($group_name, $entity_type, $bundle, $context, $mode)) {
-        $form_state->setErrorByName('fields][_add_new_group][group_name', t('Add new group: the group name %group_name already exists.', array('%group_name' => $group_name)));
-      }
-    }
   }
 }
 
@@ -579,51 +416,8 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
   $children = array_fill_keys($form['#fieldgroups'], array());
   foreach ($form_values as $name => $value) {
     if (!empty($value['parent'])) {
-      // Substitute newly added fields, in case they were dragged
-      // directly in a group.
-      if ($name == '_add_new_field' && isset($fields_added, $fields_added['_add_new_field'])) {
-        $name =  $fields_added['_add_new_field'];
-      }
-      elseif ($name == '_add_existing_field' && isset($fields_added, $fields_added['_add_existing_field'])) {
-        $name = $fields_added['_add_existing_field'];
-      }
       $children[$value['parent']][$name] = $name;
     }
-  }
-
-  // Create new group.
-  if (!empty($form_values['_add_new_group']['group_name'])) {
-    $values = $form_values['_add_new_group'];
-
-    $new_group = (object) array(
-      'group_name' => $values['group_name'],
-      'entity_type' => $entity_type,
-      'bundle' => $bundle,
-      'mode' => $mode,
-      'context' => $context,
-      'children' => isset($children['_add_new_group']) ? array_keys($children['_add_new_group']) : array(),
-      'parent_name' => $values['parent'],
-      'weight' => $values['weight'],
-      'label' => $values['label'],
-      'format_type' => $values['format']['type'],
-    );
-    $new_group->format_settings = _field_group_get_default_formatter_settings($values['format']['type'], $context);
-    field_group_group_save($new_group);
-
-    // Store new group information for any additional submit handlers.
-    $groups_added = $form_state->get('groups_added');
-    $groups_added['_add_new_group'] = $new_group->group_name;
-    drupal_set_message(t('New group %label successfully created.', array('%label' => $new_group->label)));
-
-    // Replace the newly created group in the $children array, in case it was
-    // dragged directly in an existing field.
-    foreach (array_keys($children) as $parent) {
-      if (isset($children[$parent]['_add_new_group'])) {
-        unset($children[$parent]['_add_new_group']);
-        $children[$parent][$new_group->group_name] = $new_group->group_name;
-      }
-    }
-
   }
 
   // Update existing groups.
@@ -675,32 +469,6 @@ function field_group_format_settings_form(&$group, $form, $form_state) {
   ));
 
   return $plugin->settingsForm($form, $form_state);
-}
-
-/**
- * Validate the entered css class from the submitted format settings.
- * @param Array $element The validated element
- * @param FormStateInterface $form_state The state of the form.
- */
-function field_group_validate_css_class($element, FormStateInterface $form_state) {
-  $form_state_values = $form_state->getValues();
-  $plugin_name = $form_state->get('plugin_settings_edit');
-  if (!empty($form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['classes']) && !preg_match('!^[A-Za-z0-9-_ ]+$!', $form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['classes'])) {
-    \Drupal::formBuilder()->setError($element, $form_state, t('The css class must include only letters, numbers, underscores and dashes.'));
-  }
-}
-
-/**
- * Validate the entered id attribute from the submitted format settings.
- * @param Array $element The validated element
- * @param FormStateInterface $form_state The state of the form.
- */
-function field_group_validate_id($element, FormStateInterface $form_state) {
-  $form_state_values = $form_state->getValues();
-  $plugin_name = $form_state->get('plugin_settings_edit');
-  if (!empty($form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id']) && !preg_match('!^[A-Za-z0-9-_]+$!', $form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id'])) {
-    \Drupal::formBuilder()->setError($element, $form_state, t('The id must include only letters, numbers, underscores and dashes.'));
-  }
 }
 
 /**

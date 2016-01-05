@@ -101,6 +101,7 @@ function field_group_field_info_max_weight($entity_type, $bundle, $context, $con
  * Implements hook_form_alter().
  */
 function field_group_form_alter(array &$form, FormStateInterface $form_state) {
+
   if ($form_state->getFormObject() instanceof ContentEntityFormInterface) {
 
     /**
@@ -425,8 +426,28 @@ function field_group_group_save($group) {
   if ($group->context == 'form') {
     $display = EntityFormDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
   }
-  if ($group->context == 'view') {
+  elseif ($group->context == 'view') {
     $display = EntityViewDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
+  }
+
+  // If no display was found. It doesn't exist yet, create it.
+  if (!isset($display)) {
+
+    if ($group->context == 'form') {
+      $display = EntityFormDisplay::create(array(
+        'targetEntityType' => $group->entity_type,
+        'bundle' => $group->bundle,
+        'mode' => $group->mode,
+      ))->setStatus(TRUE);
+    }
+    elseif ($group->context == 'view') {
+      $display = EntityViewDisplay::create(array(
+        'targetEntityType' => $group->entity_type,
+        'bundle' => $group->bundle,
+        'mode' => $group->mode,
+      ))->setStatus(TRUE);
+    }
+
   }
 
   /**

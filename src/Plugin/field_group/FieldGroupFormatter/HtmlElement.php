@@ -101,6 +101,9 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#options' => array(0 => $this->t('No'), 1 => $this->t('Yes')),
       '#default_value' => $this->getSetting('show_label'),
       '#weight' => 2,
+      '#attributes' => array(
+        'data-fieldgroup-selector' => 'show_label'
+      ),
     );
 
     $form['label_element'] = array(
@@ -108,6 +111,11 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('label_element'),
       '#weight' => 3,
+      '#states' => array(
+        'visible' => array(
+          ':input[data-fieldgroup-selector="show_label"]' => array('value' => 1),
+        ),
+      ),
     );
 
     $form['attributes'] = array(
@@ -128,6 +136,9 @@ class HtmlElement extends FieldGroupFormatterBase {
       ),
       '#default_value' => $this->getSetting('effect'),
       '#weight' => 5,
+      '#attributes' => array(
+        'data-fieldgroup-selector' => 'effect'
+      ),
     );
 
     $form['speed'] = array(
@@ -136,6 +147,11 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#options' => array('slow' => $this->t('Slow'), 'fast' => $this->t('Fast')),
       '#default_value' => $this->getSetting('speed'),
       '#weight' => 6,
+      '#states' => array(
+        '!visible' => array(
+          ':input[data-fieldgroup-selector="effect"]' => array('value' => 'none'),
+        ),
+      ),
     );
 
     return $form;
