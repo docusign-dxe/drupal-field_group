@@ -25,12 +25,10 @@ use Drupal\field_ui\Form\EntityDisplayFormBase;
  * @return \stdClass
  */
 function field_group_field_ui_form_params($form, \Drupal\Core\Entity\EntityDisplayBase $display) {
-  $entity_type_definition = \Drupal::entityManager()->getDefinition($form['#entity_type']);
 
   $params = new stdClass();
   $params->entity_type = $display->getTargetEntityTypeId();
   $params->bundle = $display->getTargetBundle();
-  $params->route_parameters = Drupal\field_ui\FieldUI::getRouteBundleParameter($entity_type_definition, $form['#bundle']);
   $params->region_callback = 'field_group_display_overview_row_region';
   $params->mode = $display->getMode();
   $params->context = field_group_get_context_from_display($display);
@@ -121,8 +119,6 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
     else {
       $group = & $params->groups[$name];
     }
-
-    $config_name_suffix = $group->entity_type . '.' . $group->bundle . '.' . $group->context . '.' . $group->mode . '.' . $group->group_name;
 
     // Check the currently selected formatter, and merge persisted values for
     // formatter settings for the group.
@@ -268,16 +264,9 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
         '#suffix' => '</div>',
       );
 
-      $entity_type_definition = \Drupal::entityManager()->getDefinition($form['#entity_type']);
-      $entity_type_id = $entity_type_definition->id();
-      $admin_url = new Url(
-        'field_ui.field_group_delete_' . $entity_type_id,
-        array_merge($params->route_parameters, array(
-          'field_group' => $config_name_suffix,
-        ))
-      );
+      $delete_route = \Drupal\field_group\FieldgroupUi::getDeleteRoute($group);
 
-      $table[$name]['settings_edit']['#suffix'] .= Drupal::l(t('delete'), $admin_url);
+      $table[$name]['settings_edit']['#suffix'] .= Drupal::l(t('delete'), $delete_route);
     }
 
     $form_state->set('field_group', $field_group_form_state);

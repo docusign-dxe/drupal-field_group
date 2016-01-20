@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field_group\FieldgroupUi;
 use Drupal\field_ui\FieldUI;
 
 /**
@@ -257,45 +258,9 @@ class FieldGroupAddForm extends FormBase {
       $groups_added['_add_new_group'] = $new_group->group_name;
       drupal_set_message(t('New group %label successfully created.', array('%label' => $new_group->label)));
 
-      $form_state->setRedirectUrl($this->getRedirectUrl());
+      $form_state->setRedirectUrl(FieldgroupUi::getFieldUiRoute($new_group));
       \Drupal::cache()->invalidate('field_groups');
 
-    }
-
-  }
-  /**
-   * Get the correct url to redirect to.
-   */
-  private function getRedirectUrl() {
-
-    $entity_type = \Drupal::entityManager()->getDefinition($this->entityTypeId);
-    if ($entity_type->get('field_ui_base_route')) {
-
-      $context_route_name = "";
-      $mode_route_name = "default";
-      $route_parameters = FieldUI::getRouteBundleParameter($entity_type, $this->bundle);
-
-      // Get correct route name based on context and mode.
-      if ($this->context == 'form') {
-        $context_route_name = 'entity_form_display';
-
-        if ($this->mode != 'default') {
-          $mode_route_name = 'form_mode';
-          $route_parameters['form_mode_name'] = $this->mode;
-        }
-
-      }
-      else {
-        $context_route_name = 'entity_view_display';
-
-        if ($this->mode != 'default') {
-          $mode_route_name = 'view_mode';
-          $route_parameters['view_mode_name'] = $this->mode;
-        }
-
-      }
-
-      return new Url("entity.{$context_route_name}.{$this->entityTypeId}.{$mode_route_name}", $route_parameters);
     }
 
   }
