@@ -9,7 +9,6 @@ namespace Drupal\field_group\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\field_group\FieldgroupUi;
 
 /**
