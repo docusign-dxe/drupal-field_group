@@ -18,7 +18,7 @@ use Drupal\field_group\FieldGroupFormatterBase;
  *
  * @FieldGroupFormatter(
  *   id = "html_element",
- *   label = @Translation("Html element"),
+ *   label = @Translation("HTML element"),
  *   description = @Translation("This fieldgroup renders the inner content in a HTML element with classes and attributes."),
  *   supported_contexts = {
  *     "form",
