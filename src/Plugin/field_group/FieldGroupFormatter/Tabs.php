@@ -8,7 +8,6 @@
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\VerticalTabs;
@@ -49,7 +48,7 @@ class Tabs extends FieldGroupFormatterBase {
 
     // By default tabs don't have titles but you can override it in the theme.
     if ($this->getLabel()) {
-      $element['#title'] = SafeMarkup::checkPlain($this->getLabel());
+      $element['#title'] = Html::escape($this->getLabel());
     }
 
     $form_state = new FormState();

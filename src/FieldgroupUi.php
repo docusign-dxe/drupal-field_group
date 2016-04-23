@@ -24,7 +24,7 @@ class FieldgroupUi {
    */
   public static function getFieldUiRoute($group) {
 
-    $entity_type = \Drupal::entityManager()->getDefinition($group->entity_type);
+    $entity_type = \Drupal::entityTypeManager()->getDefinition($group->entity_type);
     if ($entity_type->get('field_ui_base_route')) {
 
       $context_route_name = "";
@@ -65,7 +65,7 @@ class FieldgroupUi {
   public static function getDeleteRoute($group) {
 
     $entity_type_id = $group->entity_type;
-    $entity_type = \Drupal::entityManager()->getDefinition($entity_type_id);
+    $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type_id);
     if ($entity_type->get('field_ui_base_route')) {
 
       $mode_route_name = '';

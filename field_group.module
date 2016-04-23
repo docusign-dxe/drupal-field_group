@@ -22,7 +22,7 @@ require_once __DIR__ . '/includes/helpers.inc';
 function field_group_theme_registry_alter(&$theme_registry) {
 
   // Inject field_group_build_entity_groups in all entity theming functions.
-  $entity_info = Drupal::entityManager()->getDefinitions();
+  $entity_info = Drupal::entityTypeManager()->getDefinitions();
   $entity_types = array();
   foreach ($entity_info as $entity_type_id => $entity_type) {
     if ($route_name = $entity_type->get('field_ui_base_route')) {

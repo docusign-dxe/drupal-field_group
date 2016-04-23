@@ -98,7 +98,7 @@ class ManageDisplayTest extends WebTestBase {
     debug($data);
 
     // Test that group is not in the $groups array.
-    \Drupal::entityManager()->getStorage('entity_form_display')->resetCache();
+    \Drupal::entityTypeManager()->getStorage('entity_form_display')->resetCache();
     $loaded_group = field_group_load_field_group($group->group_name, 'node', $this->type, 'form', 'default');
     debug($loaded_group);
     $this->assertNull($loaded_group, t('Group not found after deleting'));
@@ -116,7 +116,7 @@ class ManageDisplayTest extends WebTestBase {
     $this->assertRaw(t('The group %label has been deleted from the %type content type.', array('%label' => $group->label, '%type' => $this->type)), t('Group removal message displayed on screen.'));
 
     // Test that group is not in the $groups array.
-    \Drupal::entityManager()->getStorage('entity_view_display')->resetCache();
+    \Drupal::entityTypeManager()->getStorage('entity_view_display')->resetCache();
     $loaded_group = field_group_load_field_group($group->group_name, 'node', $this->type, 'view', 'default');
     debug($loaded_group);
     $this->assertNull($loaded_group, t('Group not found after deleting'));
