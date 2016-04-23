@@ -6,9 +6,9 @@
  * needed on the Fields UI Manage forms (display and fields).
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\field_ui\Form\EntityDisplayFormBase;
 
 /**
