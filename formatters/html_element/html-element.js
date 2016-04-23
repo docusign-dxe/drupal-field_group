@@ -6,7 +6,7 @@
    * Implements Drupal.FieldGroup.processHook().
    */
   Drupal.FieldGroup.Effects.processHtml_element = {
-    execute: function (context, settings, type) {
+    execute: function (context, settings, group_info) {
 
       $('.fieldgroup-collapsible', context).once('fieldgroup-effects').each(function () {
         var $wrapper = $(this);

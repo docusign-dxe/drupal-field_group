@@ -6,7 +6,7 @@
    * Implements Drupal.FieldGroup.processHook().
    */
   Drupal.FieldGroup.Effects.processAccordion = {
-    execute: function (context, settings, type) {
+    execute: function (context, settings, group_info) {
       $('div.field-group-accordion-wrapper', context).once('fieldgroup-effects', function () {
         var wrapper = $(this);
 

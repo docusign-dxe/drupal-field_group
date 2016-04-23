@@ -185,7 +185,11 @@ function field_group_field_group_pre_render(&$element, &$group, &$rendering_obje
 
   // Add all field_group format types to the js settings.
   $element['#attached']['drupalSettings']['field_group'] = array(
-    $group->format_type => $group->mode,
+    $group->format_type => [
+      'mode' => $group->mode,
+      'context' => $group->context,
+      'settings' => $group->format_settings,
+    ],
   );
 
   $element['#weight'] = $group->weight;
