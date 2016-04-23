@@ -182,6 +182,9 @@ class FieldGroupAddForm extends FormBase {
 
     $group = new \stdClass();
     $group->context = $this->context;
+    $group->entity_type = $this->entityTypeId;
+    $group->bundle = $this->bundle;
+    $group->mode = $this->mode;
 
     $manager = \Drupal::service('plugin.manager.field_group.formatters');
     $plugin = $manager->getInstance(array(
