@@ -275,7 +275,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
 
   $form['#attached']['library'][] = 'field_group/field_ui';
 
-  $form['actions']['submit']['#submit'][] = 'field_group_field_overview_submit';
+  array_unshift($form['actions']['submit']['#submit'], 'field_group_field_overview_submit');
 
   // Create the settings for fieldgroup as vertical tabs (merged with DS).
   field_group_field_ui_create_vertical_tabs($form, $form_state, $params);
@@ -435,7 +435,13 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
         $group->format_settings += $default_formatter_settings;
       }
 
-      field_group_group_save($group);
+      /** @var EntityFormInterface $entity_form */
+      $entity_form = $form_state->getFormObject();
+
+      /** @var EntityDisplayInterface $display */
+      $display = $entity_form->getEntity();
+
+      field_group_group_save($group, $display);
     }
   }
 

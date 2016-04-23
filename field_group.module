@@ -444,14 +444,18 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
  *
  * @param $group
  *   A group definition.
+ * @param $display
+ *   The display to update if known.
  * @return EntityDisplayInterface || NULL
  */
-function field_group_group_save($group) {
-  if ($group->context == 'form') {
-    $display = EntityFormDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
-  }
-  elseif ($group->context == 'view') {
-    $display = EntityViewDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
+function field_group_group_save($group, $display = NULL) {
+  if ($display === NULL) {
+    if ($group->context == 'form') {
+      $display = EntityFormDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
+    }
+    elseif ($group->context == 'view') {
+      $display = EntityViewDisplay::load($group->entity_type . '.' . $group->bundle . '.' . $group->mode);
+    }
   }
 
   // If no display was found. It doesn't exist yet, create it.
@@ -539,7 +543,6 @@ function field_group_info_groups($entity_type, $bundle, $context, $mode) {
     }
     $data = $display->getThirdPartySettings('field_group');
   }
-
   $groups = array();
   if (isset($data)) {
     foreach ($data as $group_name => $definition) {
