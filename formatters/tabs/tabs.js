@@ -24,9 +24,9 @@
           }
 
           if ($('.error', $(this)).length) {
-            $(this).data('horizontalTab').link.parent().addClass('error');
+            $(this).data(direction + 'Tab').link.parent().addClass('error');
             Drupal.FieldGroup.setGroupWithfocus($(this));
-            $(this).data('horizontalTab').focus();
+            $(this).data(direction + 'Tab').focus();
           }
 
         });
