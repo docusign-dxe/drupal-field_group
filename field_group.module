@@ -683,7 +683,7 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
 
   // Reset an empty group.
   if ($empty_group) {
-    $element = NULL;
+    $element = [];
   }
 
   return $empty_group;
