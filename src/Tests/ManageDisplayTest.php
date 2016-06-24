@@ -57,6 +57,15 @@ class ManageDisplayTest extends WebTestBase {
     $group = array(
       'group_formatter' => $this->group_formatter,
       'label' => $this->group_label,
+    );
+
+    $this->drupalPostForm('admin/structure/types/manage/' . $this->type . '/form-display/add-group', $group, t('Save and continue'));
+    $this->assertText('Machine-readable name field is required.');
+
+    // Setup new group.
+    $group = array(
+      'group_formatter' => $this->group_formatter,
+      'label' => $this->group_label,
       'group_name' => $this->group_name_input,
     );
 

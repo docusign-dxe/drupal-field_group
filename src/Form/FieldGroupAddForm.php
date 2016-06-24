@@ -159,7 +159,7 @@ class FieldGroupAddForm extends FormBase {
         'source' => array('new_group_wrapper', 'label'),
         'exists' => array($this, 'groupNameExists'),
       ),
-      '#required' => FALSE,
+      '#required' => TRUE,
     );
 
     $form['actions'] = array('#type' => 'actions');
