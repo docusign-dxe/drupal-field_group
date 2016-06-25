@@ -86,10 +86,14 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
   $form_state_values = $form_state->getValues();
   $field_group_form_state = $form_state->get('field_group');
 
+  if ($field_group_form_state == NULL) {
+    $field_group_form_state = $params->groups;
+  }
+
   $table['#parent_options'] = [];
 
   // Extend available parenting options.
-  foreach ($params->groups as $name => $group) {
+  foreach ($field_group_form_state as $name => $group) {
     $table['#parent_options'][$name] = $group->label;
   }
 
@@ -107,15 +111,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
   $refresh_rows = isset($form_state_values['refresh_rows']) ? $form_state_values['refresh_rows'] : (isset($form_state->getUserInput()['refresh_rows']) ? $form_state->getUserInput()['refresh_rows'] : NULL);
   // Create the group rows and check actions.
   foreach ($form['#fieldgroups'] as $name) {
-
-    // Play around with form_sxtate so we only need to hold things
-    // between requests, until the save button was hit.
-    if (isset($form_state_values['refresh_rows'][$name])) {
-      $group = & $field_group_form_state[$name];
-    }
-    else {
-      $group = & $params->groups[$name];
-    }
+    $group = &$field_group_form_state[$name];
 
     // Check the currently selected formatter, and merge persisted values for
     // formatter settings for the group.
