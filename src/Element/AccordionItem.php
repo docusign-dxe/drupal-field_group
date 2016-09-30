@@ -21,7 +21,7 @@ class AccordionItem extends RenderElement {
    */
   public function getInfo() {
     return array(
-      '#collapsed' => FALSE,
+      '#open' => TRUE,
       '#theme_wrappers' => array('field_group_accordion_item'),
     );
   }
