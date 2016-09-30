@@ -8,7 +8,7 @@ Description:
   field_group is a module that will group a set of fields. In Drupal8,
   with fields, one means all fields that come from fieldable entities.
   You can add fieldgroups in several types with their own format settings.
-  field_group has API functions to add your own formatter and rendering for
+  field_group uses plugins to add your own formatter and rendering for
   it.
   One of the biggest improvements to previous versions, is that fieldgroups
   have unlimited nesting, better display control.
