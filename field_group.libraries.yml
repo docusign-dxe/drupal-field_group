@@ -56,6 +56,7 @@ formatter.horizontal_tabs:
   dependencies:
     - field_group/core
     - field_group/formatter.tabs
+    - core/drupal.collapse
 
 element.horizontal_tabs:
   version: VERSION
@@ -64,6 +65,7 @@ element.horizontal_tabs:
   css:
     component:
       formatters/tabs/horizontal-tabs.css: {}
-
-
-
+  dependencies:
+    - field_group/core
+    - field_group/formatter.tabs
+    - core/drupal.collapse
