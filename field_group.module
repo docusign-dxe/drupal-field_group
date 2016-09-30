@@ -649,6 +649,7 @@ function field_group_remove_empty_form_groups($name, & $element, $groups, &$form
 
 /**
  * Remove empty groups on entity display.
+ *
  * @param array $element
  *   The element to check the empty state.
  * @param array $groups
@@ -659,8 +660,8 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
   $empty_child = TRUE;
   $empty_group = TRUE;
 
-  // Loop through the children for current element.
-  foreach (Element::children($element) as $name) {
+  // Loop through the visible children for current element.
+  foreach (Element::getVisibleChildren($element) as $name) {
 
     // Descend if the child is a group.
     if (in_array($name, $groups)) {
@@ -669,12 +670,12 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
         $empty_group = FALSE;
       }
     }
-    // Child is a field, the element is not empty and access is set to true (or empty).
+    // Child is a field or a renderable array and the element is not empty.
     elseif (!empty($element[$name])) {
-      $has_access = !isset($element[$name]['#access']) || $element[$name]['#access'];
-      $has_markup = isset($element[$name]['#markup']);
-      $has_items = isset($element[$name][0]);
-      if ($has_access && ($has_markup || $has_items)) {
+      $clone_element = $element[$name];
+      // Weight parameter can make empty element seen as not empty.
+      unset($clone_element['#weight']);
+      if (!Element::isEmpty($clone_element)) {
         $empty_group = FALSE;
       }
     }
