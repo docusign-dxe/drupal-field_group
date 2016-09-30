@@ -108,20 +108,21 @@ function field_group_form_alter(array &$form, FormStateInterface $form_state) {
     /**
      * @var EntityFormDisplayInterface $form_display
      */
-    $form_display = $form_state->getStorage()['form_display'];
-    $entity = $form_state->getFormObject()->getEntity();
+    if ($form_display = $form_state->getStorage()['form_display']) {
+      $entity = $form_state->getFormObject()->getEntity();
 
-    $context = array(
-      'entity_type' => $entity->getEntityTypeId(),
-      'bundle' => $entity->bundle(),
-      'entity' => $entity,
-      'context' => 'form',
-      'display_context' => 'form',
-      'mode' => $form_display->getMode(),
-    );
+      $context = array(
+        'entity_type' => $entity->getEntityTypeId(),
+        'bundle' => $entity->bundle(),
+        'entity' => $entity,
+        'context' => 'form',
+        'display_context' => 'form',
+        'mode' => $form_display->getMode(),
+      );
 
-    field_group_attach_groups($form, $context);
-    $form['#pre_render'][] = 'field_group_form_pre_render';
+      field_group_attach_groups($form, $context);
+      $form['#pre_render'][] = 'field_group_form_pre_render';
+    }
   }
 
 }
