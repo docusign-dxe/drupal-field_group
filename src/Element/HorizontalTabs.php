@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\Element\HorizontalTabs.
- */
-
 namespace Drupal\field_group\Element;
 
 use Drupal\Core\Form\FormStateInterface;

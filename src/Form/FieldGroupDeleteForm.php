@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\Form\FieldGroupDeleteForm.
- */
-
 namespace Drupal\field_group\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;

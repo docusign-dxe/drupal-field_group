@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\Form\FieldGroupAddForm.
- */
-
 namespace Drupal\field_group\Form;
 
 use Drupal\Core\Form\FormBase;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_ui\FieldUI.
- */
-
 namespace Drupal\field_group;
 use Drupal\Core\Url;
 use Drupal\field_ui\FieldUI;

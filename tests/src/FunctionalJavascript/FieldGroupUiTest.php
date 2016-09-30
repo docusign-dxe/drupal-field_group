@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\field_group\Functional\FieldGroupUiTest.
- */
-
 namespace Drupal\Tests\field_group\FunctionalJavascript;
 
 use Drupal\Component\Utility\Unicode;

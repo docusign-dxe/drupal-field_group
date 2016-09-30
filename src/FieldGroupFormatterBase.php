@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\FieldGroupFormatterBase.
- */
-
 namespace Drupal\field_group;
 
 use Drupal\Core\Field\PluginSettingsBase;

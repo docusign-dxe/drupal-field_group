@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\field_group\Tests\ManageDisplayTest.
- */
-
 namespace Drupal\field_group\Tests;
 
 use Drupal\Component\Utility\Unicode;

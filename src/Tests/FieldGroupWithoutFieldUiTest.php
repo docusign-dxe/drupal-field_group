@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\field_group\Tests\Functional\FieldGroupWithoutFieldUiTest.
- */
-
 namespace Drupal\field_group\Tests;
 
 use Drupal\Core\Url;

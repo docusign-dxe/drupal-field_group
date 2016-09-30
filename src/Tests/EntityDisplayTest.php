@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\field_group\Tests\EntityDisplayTest.
- */
-
 namespace Drupal\field_group\Tests;
 
 use Drupal\field\Entity\FieldConfig;

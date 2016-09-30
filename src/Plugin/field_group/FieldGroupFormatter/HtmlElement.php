@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\Plugin\field_group\FieldGroupFormatter\HtmlElement.
- */
-
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
 use Drupal\Component\Utility\Html;

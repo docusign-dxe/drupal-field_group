@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group\Element\AccordionItem.
- */
-
 namespace Drupal\field_group\Element;
 
 use Drupal\Core\Render\Element\RenderElement;
