@@ -37,7 +37,7 @@ class AccordionItem extends FieldGroupFormatterBase {
 
     $element += array(
       '#type' => 'field_group_accordion_item',
-      '#open' => $this->getSetting('formatter'),
+      '#open' => $this->getSetting('formatter') == 'open' ? TRUE : FALSE,
       '#description' => $this->getSetting('description'),
       '#title' => Drupal::translation()->translate($this->getLabel()),
     );

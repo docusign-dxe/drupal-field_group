@@ -7,7 +7,7 @@
    */
   Drupal.FieldGroup.Effects.processAccordion = {
     execute: function (context, settings, group_info) {
-      $('div.field-group-accordion-wrapper', context).once('fieldgroup-effects', function () {
+      $('div.field-group-accordion-wrapper', context).once('fieldgroup-effects').each(function () {
         var wrapper = $(this);
 
         // Get the index to set active.
@@ -32,7 +32,7 @@
           }
         });
 
-        if (type === 'form') {
+        if (group_info.context === 'form') {
 
           var $firstErrorItem = false;
 
