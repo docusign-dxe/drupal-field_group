@@ -4,4 +4,4 @@ description: 'Provides the ability to group your fields on both form and display
 package : Fields
 core: 8.x
 dependencies:
-  - field
+  - drupal:field
