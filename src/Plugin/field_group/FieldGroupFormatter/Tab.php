@@ -28,6 +28,7 @@ class Tab extends FieldGroupFormatterBase {
    * {@inheritdoc}
    */
   public function preRender(&$element, $rendering_object) {
+    parent::preRender($element, $rendering_object);
 
     $add = array(
       '#type' => 'details',

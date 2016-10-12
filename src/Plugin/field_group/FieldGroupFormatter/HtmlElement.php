@@ -26,6 +26,7 @@ class HtmlElement extends FieldGroupFormatterBase {
    * {@inheritdoc}
    */
   public function preRender(&$element, $rendering_object) {
+    parent::preRender($element, $rendering_object);
 
     $element_attributes = new Attribute();
 
