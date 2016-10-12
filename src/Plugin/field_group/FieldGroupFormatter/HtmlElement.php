@@ -118,12 +118,21 @@ class HtmlElement extends FieldGroupFormatterBase {
       ),
     );
 
+    if ($this->context == 'form') {
+      $form['required_fields'] = array(
+        '#title' => $this->t('Mark group as required if it contains required fields.'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->getSetting('required_fields'),
+        '#weight' => 4,
+      );
+    }
+
     $form['attributes'] = array(
       '#title' => $this->t('Attributes'),
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('attributes'),
       '#description' => $this->t('E.g. name="anchor"'),
-      '#weight' => 4,
+      '#weight' => 5,
     );
 
     $form['effect'] = array(
@@ -135,7 +144,7 @@ class HtmlElement extends FieldGroupFormatterBase {
         'blind' => $this->t('Blind')
       ),
       '#default_value' => $this->getSetting('effect'),
-      '#weight' => 5,
+      '#weight' => 6,
       '#attributes' => array(
         'data-fieldgroup-selector' => 'effect'
       ),
@@ -146,7 +155,7 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#type' => 'select',
       '#options' => array('slow' => $this->t('Slow'), 'fast' => $this->t('Fast')),
       '#default_value' => $this->getSetting('speed'),
-      '#weight' => 6,
+      '#weight' => 7,
       '#states' => array(
         '!visible' => array(
           ':input[data-fieldgroup-selector="effect"]' => array('value' => 'none'),
