@@ -12,7 +12,7 @@
     execute: function (context, settings, group_info) {
 
       if (group_info.context === 'form') {
-        
+
         // Add required fields mark to any element containing required fields
         var direction = group_info.settings.direction;
         $(context).find('[data-' + direction + '-tabs-panes] details').once('fieldgroup-effects').each(function () {
