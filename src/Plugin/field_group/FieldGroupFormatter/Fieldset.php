@@ -55,6 +55,13 @@ class Fieldset extends FieldGroupFormatterBase {
 
     $form = parent::settingsForm();
 
+    $form['description'] = array(
+      '#title' => $this->t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $this->getSetting('description'),
+      '#weight' => -4,
+    );
+
     if ($this->context == 'form') {
       $form['required_fields'] = array(
         '#type' => 'checkbox',
