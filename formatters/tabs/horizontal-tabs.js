@@ -18,6 +18,7 @@
    */
   Drupal.behaviors.horizontalTabs = {
     attach: function (context) {
+      
       var width = drupalSettings.widthBreakpoint || 640;
       var mq = '(max-width: ' + width + 'px)';
 

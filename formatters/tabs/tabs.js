@@ -17,18 +17,19 @@
         var direction = group_info.settings.direction;
         $(context).find('[data-' + direction + '-tabs-panes] details').once('fieldgroup-effects').each(function () {
 
-          if ($(this).is('.required-fields') && $(this).find('[required]').length > 0) {
-            if (typeof $(this).data(direction + 'Tab') !== 'undefined') {
-              $(this).data(direction + 'Tab').link.find('strong:first').addClass('form-required');
+          var $this = $(this);
+          if (typeof $(this).data(direction + 'Tab') !== 'undefined') {
+
+            if ($(this).is('.required-fields') && $(this).find('[required]').length > 0) {
+              $this.data(direction + 'Tab').link.find('strong:first').addClass('form-required');
+            }
+
+            if ($('.error', $this).length) {
+              $this.data(direction + 'Tab').link.parent().addClass('error');
+              Drupal.FieldGroup.setGroupWithfocus($this);
+              $this.data(direction + 'Tab').focus();
             }
           }
-
-          if ($('.error', $(this)).length) {
-            $(this).data(direction + 'Tab').link.parent().addClass('error');
-            Drupal.FieldGroup.setGroupWithfocus($(this));
-            $(this).data(direction + 'Tab').focus();
-          }
-
         });
 
       }
