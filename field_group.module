@@ -84,16 +84,27 @@ function field_group_theme_suggestions_alter(array &$suggestions, array $variabl
       $name = $element['#group_name'];
       $entity_type = $element['#entity_type'];
       $bundle = $element['#bundle'];
-      $wrapper = $element['#wrapper_element'];
 
-      $suggestions[] = $hook . '__' . $wrapper;
+      $wrapper = '';
+      if (isset($element['#wrapper_element'])) {
+        $wrapper = $element['#wrapper_element'];
+        $suggestions[] = $hook . '__' . $wrapper;
+      }
+
       $suggestions[] = $hook . '__' . $entity_type;
       $suggestions[] = $hook . '__' . $bundle;
       $suggestions[] = $hook . '__' . $name;
-      $suggestions[] = $hook . '__' . $entity_type . '__' . $wrapper;
+
+      if ($wrapper) {
+        $suggestions[] = $hook . '__' . $entity_type . '__' . $wrapper;
+      }
+
       $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle;
       $suggestions[] = $hook . '__' . $entity_type . '__' . $name;
-      $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $wrapper;
+
+      if ($wrapper) {
+        $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $wrapper;
+      }
       $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $name;
       break;
   }
