@@ -157,6 +157,7 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
     // Add a required-fields class to trigger the js.
     if ($this->getSetting('required_fields')) {
       $classes[] = 'required-fields';
+      $classes[] = 'field-group-' . str_replace('_', '-', $this->getBaseId());
     }
 
     if ($this->getSetting('classes')) {

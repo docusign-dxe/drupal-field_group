@@ -48,6 +48,10 @@ class Details extends FieldGroupFormatterBase {
         '#description' => $this->getSetting('description'),
       );
     }
+
+    if ($this->context == 'form' && $this->getSetting('required_fields')) {
+      $element['#attached']['library'][] = 'field_group/formatter.details';
+    }
   }
 
   /**

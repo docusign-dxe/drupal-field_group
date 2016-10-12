@@ -39,6 +39,13 @@ formatter.html_element:
   dependencies:
     - field_group/core
 
+formatter.details:
+  version: VERSION
+  js:
+    formatters/details/details.js: {}
+  dependencies:
+    - field_group/core
+
 formatter.tabs:
   version: VERSION
   js:
