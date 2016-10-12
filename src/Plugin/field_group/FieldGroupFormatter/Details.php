@@ -49,8 +49,9 @@ class Details extends FieldGroupFormatterBase {
       );
     }
 
-    if ($this->context == 'form' && $this->getSetting('required_fields')) {
+    if ($this->getSetting('required_fields')) {
       $element['#attached']['library'][] = 'field_group/formatter.details';
+      $element['#attached']['library'][] = 'field_group/core';
     }
   }
 

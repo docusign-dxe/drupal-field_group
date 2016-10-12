@@ -736,3 +736,4 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
   return $empty_group;
 
 }
+

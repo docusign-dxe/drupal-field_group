@@ -47,6 +47,10 @@ class AccordionItem extends FieldGroupFormatterBase {
       $element += array('#attributes' => array('class' => $classes));
     }
 
+    if ($this->getSetting('required_fields')) {
+      $element['#attached']['library'][] = 'field_group/formatter.details';
+    }
+
   }
 
   /**

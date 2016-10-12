@@ -46,6 +46,11 @@ class Fieldset extends FieldGroupFormatterBase {
     if (!empty($classes)) {
       $element['#attributes'] += array('class' => $classes);
     }
+
+    if ($this->getSetting('required_fields')) {
+      $element['#attached']['library'][] = 'field_group/formatter.fieldset';
+      $element['#attached']['library'][] = 'field_group/core';
+    }
   }
 
   /**

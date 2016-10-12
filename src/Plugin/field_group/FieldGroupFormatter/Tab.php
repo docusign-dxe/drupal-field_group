@@ -61,6 +61,11 @@ class Tab extends FieldGroupFormatterBase {
       $add['#parents'] = array($add['#group']);
     }
 
+    if ($this->getSetting('required_fields')) {
+      $element['#attached']['library'][] = 'field_group/formatter.tabs';
+      $element['#attached']['library'][] = 'field_group/core';
+    }
+
     $element += $add;
 
   }

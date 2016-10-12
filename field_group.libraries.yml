@@ -15,9 +15,6 @@ core:
   version: VERSION
   js:
     js/field_group.js: {}
-  css:
-    theme:
-      css/field_group.css: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -29,34 +26,33 @@ formatter.accordion:
   js:
     formatters/accordion/accordion.js: {}
   dependencies:
-    - field_group/core
     - core/jquery.ui.accordion
 
 formatter.html_element:
   version: VERSION
   js:
     formatters/html_element/html-element.js: {}
-  dependencies:
-    - field_group/core
+
+formatter.fieldset:
+  version: VERSION
+  js:
+    formatters/fieldset/fieldset.js: {}
 
 formatter.details:
   version: VERSION
   js:
     formatters/details/details.js: {}
-  dependencies:
-    - field_group/core
 
 formatter.tabs:
   version: VERSION
   js:
     formatters/tabs/tabs.js: {}
-  dependencies:
-    - field_group/core
 
 element.horizontal_tabs:
   version: VERSION
   js:
-    formatters/tabs/horizontal-tabs.js: {}
+    # Load before field_group/core.
+    formatters/tabs/horizontal-tabs.js: {weight: -1}
   css:
     component:
       formatters/tabs/horizontal-tabs.css: {}
