@@ -1,5 +1,5 @@
 History:
-  Field_group was written when drupal 7 was released. For drupal 6, the module is
+  Field_group was originally written when drupal 7 was released. For drupal 6, the module is
   located in the CCK module (http://drupal.org/project/cck).
   As drupal core has a fields API drupal > 6, the field_group module
   is considered a contribution.
@@ -18,6 +18,10 @@ Description:
 Module project page:
   http://drupal.org/project/field_group
 
+Documentation page (D7 version):
+  http://drupal.org/node/1017838
+  http://drupal.org/node/1017962
+
 Available group types:
   - Html element
   - Fieldsets
@@ -27,6 +31,13 @@ Available group types:
 
 To submit bug reports and feature suggestions, or to track changes:
   http://drupal.org/project/issues/field_group
+
+-- Configuration --
+1. You can configure the field groups for different displays like, in managed_form_display and managed_display of the entity type.
+2. You can create different field groups under managed_form_display by adding a new group under "Add new group" label and the format the grouping using the desired formatter for displaying the same.
+3. Same thing can be done in managed_display.
+4. The field grouping done in managed display will be reflected on the view detail page of the entity, while that done in the managed_form_display will be
+reflected in the add/edit form of the entity.
 
 -- MAINTAINERS --
 
