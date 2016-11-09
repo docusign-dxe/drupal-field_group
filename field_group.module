@@ -10,6 +10,7 @@ use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\ConfirmFormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -34,6 +35,11 @@ function field_group_theme_registry_alter(&$theme_registry) {
     if (in_array($theme_hook, $entity_types) || (!empty($info['base hook']) && in_array($info['base hook'], $entity_types))) {
       $theme_registry[$theme_hook]['preprocess functions'][] = 'field_group_build_entity_groups';
     }
+  }
+
+  // ECK does not use the eck as theme function.
+  if (isset($theme_registry['eck_entity'])) {
+    $theme_registry['eck_entity']['preprocess functions'][] = 'field_group_build_entity_groups';
   }
 
 }
@@ -182,7 +188,6 @@ function field_group_inline_entity_form_entity_form_alter(&$entity_form, FormSta
     'entity_type' => $entity_form['#entity']->getEntityTypeId(),
     'bundle' => $entity_form['#entity']->bundle(),
     'entity' => $entity_form['#entity'],
-    'context' => 'form',
     'display_context' => 'form',
     'mode' => 'default',
   ];
@@ -192,16 +197,23 @@ function field_group_inline_entity_form_entity_form_alter(&$entity_form, FormSta
 }
 
 /**
- * Implements hook_entity_display_build_alter().
+ * Implements hook_entity_view_alter().
  */
-function field_group_entity_display_build_alter(&$element, $context) {
+function field_group_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInterface $display) {
 
-  $context['entity_type'] = $context['display']->getTargetEntityTypeId();
-  $context['bundle'] = $context['display']->getTargetBundle();
-  $context['mode'] = $context['display']->getMode();
-  $context['context'] = 'view';
+  $context = array(
+    'entity_type' => $display->getTargetEntityTypeId(),
+    'bundle' => $entity->bundle(),
+    'entity' => $entity,
+    'display_context' => 'view',
+    'mode' => $display->getMode(),
+  );
 
-  field_group_attach_groups($element, $context);
+  field_group_attach_groups($build, $context);
+
+  if (empty($build['#theme'])) {
+    $build['#pre_render'][] = 'field_group_entity_view_pre_render';
+  }
 }
 
 /**
@@ -289,7 +301,7 @@ function field_group_attach_groups(&$element, $context) {
   $entity_type = $context['entity_type'];
   $bundle = $context['bundle'];
   $mode = $context['mode'];
-  $display_context = $context['context'];
+  $display_context = $context['display_context'];
 
   $element['#fieldgroups'] = field_group_info_groups($entity_type, $bundle, $display_context, $mode);
 
@@ -317,8 +329,6 @@ function field_group_attach_groups(&$element, $context) {
  */
 function field_group_build_entity_groups(&$vars, $context = 'view') {
 
-  $element = [];
-
   if ($context == 'form') {
     $element = &$vars;
     $nest_vars = NULL;
@@ -329,6 +339,15 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
     }
     elseif (isset($vars['content'])) {
       $element = &$vars['content'];
+    }
+    else {
+
+      if ($context === 'eck_entity') {
+        $element = &$vars['entity'];
+      }
+      else {
+        $element = &$vars;
+      }
     }
 
     $nest_vars = &$vars;
@@ -357,11 +376,13 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
 
   // Put groups inside content if we are rendering an entity_view.
   foreach ($element['#fieldgroups'] as $group) {
-    if (!empty($element[$group->group_name]) && $context != 'user_profile') {
-      $vars['content'][$group->group_name] = $element[$group->group_name];
-    }
-    elseif (!empty($element[$group->group_name])) {
-      $vars['user_profile'][$group->group_name] = $element[$group->group_name];
+    if (!empty($element[$group->group_name])) {
+      if (isset($vars['content'])) {
+        $vars['content'][$group->group_name] = $element[$group->group_name];
+      }
+      elseif (isset($vars['user_profile'])) {
+        $vars['user_profile'][$group->group_name] = $element[$group->group_name];
+      }
     }
   }
 
