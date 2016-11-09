@@ -38,6 +38,11 @@
           return;
         }
 
+        // If collapse.js did not do his work yet, call it directly.
+        if (!$($details[0]).hasClass('.collapse-processed')) {
+          Drupal.behaviors.collapse.attach(context);
+        }
+
         // Create the tab column.
         var tab_list = $('<ul class="horizontal-tabs-list"></ul>');
         $(this).wrap('<div class="horizontal-tabs clearfix"></div>').before(tab_list);
