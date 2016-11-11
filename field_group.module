@@ -230,6 +230,15 @@ function field_group_form_pre_render($element) {
 }
 
 /**
+ * Pre render callback for rendering groups on entities without theme hook.
+ * @param $element
+ *   Entity being rendered.
+ */
+function field_group_entity_view_pre_render($element) {
+  field_group_build_entity_groups($element, 'view');
+}
+
+/**
  * Implements hook_field_group_pre_render().
  *
  * @param Array $element
