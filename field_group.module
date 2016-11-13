@@ -211,8 +211,22 @@ function field_group_entity_view_alter(&$build, EntityInterface $entity, EntityD
 
   field_group_attach_groups($build, $context);
 
+  // If no theme hook, we have no theme hook to preprocess.
+  // Add a prerender.
   if (empty($build['#theme'])) {
-    $build['#pre_render'][] = 'field_group_entity_view_pre_render';
+
+    $ds_enabled = false;
+    if (Drupal::moduleHandler()->moduleExists('ds')) {
+      // Check if DS is enabled for this display.
+      if ($display->getThirdPartySetting('ds', 'layout') && !Drupal\ds\Ds::isDisabled()) {
+        $ds_enabled = true;
+      }
+    }
+
+    // If DS is enabled, no pre render is needed (DS adds fieldgroup preprocessing).
+    if (!$ds_enabled) {
+      $build['#pre_render'][] = 'field_group_entity_view_pre_render';
+    }
   }
 }
 
@@ -236,6 +250,7 @@ function field_group_form_pre_render($element) {
  */
 function field_group_entity_view_pre_render($element) {
   field_group_build_entity_groups($element, 'view');
+  return $element;
 }
 
 /**
@@ -769,4 +784,3 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
   return $empty_group;
 
 }
-
