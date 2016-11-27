@@ -50,17 +50,13 @@
         // Transform each details into a tab.
         $details.each(function (i) {
           var $this = $(this);
+          var summaryElement = $this.find('> summary .details-title');
 
-          // If details is not supported, summary is a link.
-          // Take the text of the first element inside the summary.
-          if (Modernizr.details) {
-            var summary = $(this).find('> summary').clone().children().remove().end().text();
-          }
-          else {
-            var summary = $(this).find('> summary .details-title').clone().children().remove().end().text();
+          if (!summaryElement.length)
+            summaryElement = $this.find('> summary');
           }
 
-
+          var summary = summaryElement.clone().children().remove().end().text();
           var horizontal_tab = new Drupal.horizontalTab({
             title: $.trim(summary),
             details: $this
