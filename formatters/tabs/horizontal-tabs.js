@@ -52,7 +52,7 @@
           var $this = $(this);
           var summaryElement = $this.find('> summary .details-title');
 
-          if (!summaryElement.length)
+          if (!summaryElement.length) {
             summaryElement = $this.find('> summary');
           }
 
