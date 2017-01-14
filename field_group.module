@@ -189,7 +189,7 @@ function field_group_inline_entity_form_entity_form_alter(&$entity_form, FormSta
     'bundle' => $entity_form['#entity']->bundle(),
     'entity' => $entity_form['#entity'],
     'display_context' => 'form',
-    'mode' => 'default',
+    'mode' => isset($entity_form['#form_mode']) ? $entity_form['#form_mode'] : 'default',
   ];
 
   field_group_attach_groups($entity_form, $context);
