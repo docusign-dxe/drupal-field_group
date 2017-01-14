@@ -539,7 +539,6 @@ function field_group_get_content_element_key($context = 'default') {
   $keys = &drupal_static('field_group_content_elements');
   if (!isset($keys)) {
     $keys['default'] = 'content';
-    $keys['user'] = 'user_profile';
     // Allow other modules to alter the array.
     Drupal::moduleHandler()->alter('field_group_content_element_keys', $keys);
   }
