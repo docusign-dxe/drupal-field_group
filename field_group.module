@@ -347,7 +347,7 @@ function field_group_attach_groups(&$element, $context) {
  * @see field_group_theme_registry_alter
  * @see field_group_fields_nest()
  * @param $vars preprocess vars or form element
- * @param $context The display context (form or view)
+ * @param $context The display context (entity type, form or view)
  * @return $element Array with re-arranged fields in groups.
  */
 function field_group_build_entity_groups(&$vars, $context = 'view') {
@@ -364,7 +364,6 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
       $element = &$vars['content'];
     }
     else {
-
       if ($context === 'eck_entity') {
         $element = &$vars['entity'];
       }
@@ -382,7 +381,7 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
   }
 
   // Nest the fields in the corresponding field groups.
-  field_group_fields_nest($element, $nest_vars);
+  field_group_fields_nest($element, $nest_vars, $context);
 
   // Allow others to alter the pre_rendered build.
   Drupal::moduleHandler()->alter('field_group_build_pre_render', $element);
@@ -400,11 +399,9 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
   // Put groups inside content if we are rendering an entity_view.
   foreach ($element['#fieldgroups'] as $group) {
     if (!empty($element[$group->group_name])) {
-      if (isset($vars['content'])) {
-        $vars['content'][$group->group_name] = $element[$group->group_name];
-      }
-      elseif (isset($vars['user_profile'])) {
-        $vars['user_profile'][$group->group_name] = $element[$group->group_name];
+      $key = field_group_get_content_element_key($context);
+      if (isset($vars[$key])) {
+        $vars[$key][$group->group_name] = $element[$group->group_name];
       }
     }
   }
@@ -422,8 +419,10 @@ function field_group_build_entity_groups(&$vars, $context = 'view') {
  *   The current element to analyse for grouping.
  * @param Array $vars
  *   Rendering vars from the entity being viewed.
+ * @param Array $context
+ *   The display context (entity type, form or view).
  */
-function field_group_fields_nest(&$element, &$vars = NULL) {
+function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
 
   // Create all groups and keep a flat list of references to these groups.
   $group_references = array();
@@ -453,14 +452,11 @@ function field_group_fields_nest(&$element, &$vars = NULL) {
 
     // Entity being viewed
     if ($vars) {
-      // If not a group, check vars['content'] for empty field.
-      if (!isset($element['#fieldgroups'][$child_name]) && isset($vars['content'][$child_name])) {
-        $group_references[$parent_name][$child_name] = $vars['content'][$child_name];
-        unset($vars['content'][$child_name]);
-      }
-      elseif (!isset($element['#fieldgroups'][$child_name]) && isset($vars['user_profile'][$child_name])) {
-        $group_references[$parent_name][$child_name] = $vars['user_profile'][$child_name];
-        unset($vars['user_profile'][$child_name]);
+      // If not a group, check the content variable for empty field.
+      $key = field_group_get_content_element_key($context);
+      if (!isset($element['#fieldgroups'][$child_name]) && isset($vars[$key][$child_name])) {
+        $group_references[$parent_name][$child_name] = $vars[$key][$child_name];
+        unset($vars[$key][$child_name]);
       }
       // If this is a group, we have to use a reference to keep the reference
       // list intact (but if it is a field we don't mind).
@@ -529,6 +525,33 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
   Drupal::moduleHandler()->alter('field_group_pre_render', $element, $group, $rendering_object);
 
 }
+
+/**
+ * Provides the content element key for a display context.
+ *
+ * This allows entity modules to specify their content element for field group
+ * support, or other modules to add entity module support.
+ *
+ * @param $context
+ *   The display context (entity type, form or view).
+ */
+function field_group_get_content_element_key($context = 'default') {
+  $keys = &drupal_static('field_group_content_elements');
+  if (!isset($keys)) {
+    $keys['default'] = 'content';
+    $keys['user'] = 'user_profile';
+    // Allow other modules to alter the array.
+    Drupal::moduleHandler()->alter('field_group_content_element_keys', $keys);
+  }
+
+  // Check if we have a specific content element key for this entity type.
+  $key = $keys['default'];
+  if (isset($keys[$context])) {
+    $key = $keys[$context];
+  }
+  return $key;
+}
+
 
 /**
  * Saves a group definition.
