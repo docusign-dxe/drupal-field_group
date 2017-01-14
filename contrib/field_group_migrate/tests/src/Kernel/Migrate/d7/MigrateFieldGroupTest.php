@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\field_group_migrate\Kernel\Migrate\d7;
 
-use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
 
 /**

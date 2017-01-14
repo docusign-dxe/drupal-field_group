@@ -3,7 +3,6 @@
 namespace Drupal\Tests\field_group\FunctionalJavascript;
 
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\field_group\Tests\FieldGroupTestTrait;
 use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
