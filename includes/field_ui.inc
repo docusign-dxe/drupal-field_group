@@ -71,12 +71,12 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
     return;
   }
 
-  $callback_object = $form_state->getBuildInfo()['callback_object'];
-  if (!$callback_object instanceof EntityDisplayFormBase) {
+  $entity_display_form = $form_state->getBuildInfo()['callback_object'];
+  if (!$entity_display_form instanceof EntityDisplayFormBase) {
     throw new InvalidArgumentException('Unkown callback object.');
   }
 
-  $display = $callback_object->getEntity();
+  $display = $entity_display_form->getEntity();
 
   $params = field_group_field_ui_form_params($form, $display);
   $form['#fieldgroups'] = array_keys($params->groups);
@@ -168,6 +168,12 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
           '#default_value' => $name,
           '#attributes' => array('class' => array('field-name')),
         ),
+      ),
+      'region' => array(
+        '#type' => 'select',
+        '#options' => $entity_display_form->getRegionOptions(),
+        '#default_value' => isset($group->region) ? $group->region : 'hidden',
+        '#attributes' => ['class' => ['field-region']],
       ),
     );
 
@@ -418,6 +424,7 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
       $group->children = array_keys($children[$group_name]);
       $group->parent_name = $form_values[$group_name]['parent'];
       $group->weight = $form_values[$group_name]['weight'];
+      $group->region = $form_values[$group_name]['region'];
 
       $old_format_type = $group->format_type;
       $group->format_type = isset($form_values[$group_name]['format']['type']) ? $form_values[$group_name]['format']['type'] : 'visible';
