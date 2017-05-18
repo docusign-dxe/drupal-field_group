@@ -659,7 +659,7 @@ function field_group_info_groups($entity_type, $bundle, $context, $mode) {
     $data = $display->getThirdPartySettings('field_group');
   }
   $groups = array();
-  if (isset($data)) {
+  if (isset($data) && is_array($data)) {
     foreach ($data as $group_name => $definition) {
       $definition += array(
         'group_name' => $group_name,
