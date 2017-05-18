@@ -153,13 +153,16 @@ function field_group_field_info_max_weight($entity_type, $bundle, $context, $con
  */
 function field_group_form_alter(array &$form, FormStateInterface $form_state) {
 
-  if ($form_state->getFormObject() instanceof ContentEntityFormInterface && !$form_state->getFormObject() instanceof ConfirmFormInterface) {
+  $form_object = $form_state->getFormObject();
+  if ($form_object instanceof ContentEntityFormInterface && !$form_object instanceof ConfirmFormInterface) {
 
     /**
      * @var EntityFormDisplayInterface $form_display
      */
-    if ($form_display = $form_state->getStorage()['form_display']) {
-      $entity = $form_state->getFormObject()->getEntity();
+    $storage = $form_state->getStorage();
+    if (!empty($storage['form_display'])) {
+      $form_display = $storage['form_display'];
+      $entity = $form_object->getEntity();
 
       $context = array(
         'entity_type' => $entity->getEntityTypeId(),
