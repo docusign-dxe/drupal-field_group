@@ -34,7 +34,9 @@ class EntityDisplayTest extends WebTestBase {
     $type_name = strtolower($this->randomMachineName(8)) . '_test';
     $type = $this->drupalCreateContentType(array('name' => $type_name, 'type' => $type_name));
     $this->type = $type->id();
-    $display = entity_get_display('node', $type_name, 'default');
+    $display = \Drupal::entityTypeManager()
+      ->getStorage('entity_view_display')
+      ->load('node' . '.' . $type_name . '.' . 'default');
 
     // Create a node.
     $node_values = array('type' => $type_name);

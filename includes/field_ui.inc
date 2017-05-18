@@ -8,6 +8,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\field_ui\Form\EntityDisplayFormBase;
 
@@ -265,7 +266,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
 
       $delete_route = \Drupal\field_group\FieldgroupUi::getDeleteRoute($group);
 
-      $table[$name]['settings_edit']['#suffix'] .= Drupal::l(t('delete'), $delete_route);
+      $table[$name]['settings_edit']['#suffix'] .= Link::fromTextAndUrl(t('delete'), $delete_route)->toString();
     }
 
     $form_state->set('field_group', $field_group_form_state);
