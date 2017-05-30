@@ -46,9 +46,11 @@ function field_group_field_ui_form_params($form, \Drupal\Core\Entity\EntityDispl
   if (!empty($layout_info) && isset($layout_info['id'])) {
     $layout = \Drupal::service('plugin.manager.core.layout')->getDefinition($layout_info['id']);
     $params->available_regions = $layout->getRegionNames();
+    $params->default_region = $layout->getDefaultRegion();
   }
   else {
     $params->available_regions = ['content', 'hidden'];
+    $params->default_region = 'hidden';
   }
 
   return $params;
@@ -147,7 +149,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
     $js_rows_data[$id] = array('type' => 'group', 'name' => $name);
     // A group cannot be selected as its own parent.
     $parent_options = $table['#parent_options'];
-    $region = isset($group->region) && in_array($group->region, $params->available_regions) ? $group->region : 'hidden';
+    $region = isset($group->region) && in_array($group->region, $params->available_regions) ? $group->region : $params->default_region;
     unset($parent_options[$name]);
     $table[$name] = array(
       '#attributes' => array('class' => array('draggable', 'field-group'), 'id' => $id),
@@ -411,15 +413,9 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
   $context = field_group_get_context_from_display($display);
 
   // Load field layout info.
-  $layout_regions = [];
-  $default_region = 'hidden';
-  if ($layout_id) {
-    /** @var \Drupal\Core\Layout\LayoutDefinition $field_layout */
-    if ($field_layout = \Drupal::service('plugin.manager.core.layout')->getDefinition($layout_id)) {
-      $layout_regions = $field_layout->getRegionNames();
-      $default_region = $field_layout->getDefaultRegion();
-    }
-  }
+  $field_group_params = $form_state->get('field_group_params');
+  $layout_regions = $field_group_params->available_regions;
+  $default_region = $field_group_params->default_region;
 
   // Collect children.
   $children = array_fill_keys($form['#fieldgroups'], array());
