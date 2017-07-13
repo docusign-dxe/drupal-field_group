@@ -442,6 +442,11 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
 
       $group = $groups[$group_name];
       $group->label = $field_group_form_state[$group_name]->label;
+
+      // Sometimes field UI does a fuckup if people drag to fast when switching nested values.
+      // This results in an endless loop => Cleanup before saving.
+      //unset($children[$group_name][$form_values[$group_name]['parent']]);
+
       $group->children = array_keys($children[$group_name]);
       $group->parent_name = $form_values[$group_name]['parent'];
       $group->weight = $form_values[$group_name]['weight'];
