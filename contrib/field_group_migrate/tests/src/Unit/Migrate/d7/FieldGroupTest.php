@@ -91,4 +91,12 @@ class FieldGroupTest extends MigrateSqlSourceTestBase {
     parent::setUp();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function providerSource() {
+    // @TODO FIX.
+    return [];
+  }
+
 }
