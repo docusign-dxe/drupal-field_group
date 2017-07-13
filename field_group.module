@@ -557,14 +557,18 @@ function field_group_get_content_element_key($context = 'default') {
 
 /**
  * Saves a group definition.
- * This function is called by ctools export when calls are made
- * through ctools_export_crud_save().
  *
- * @param $group
+ * This function is called by ctools export when calls are made through
+ * ctools_export_crud_save(). It's also used as an api method to add groups to a
+ * display.
+ *
+ * @param \stdClass $group
  *   A group definition.
- * @param $display
+ * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
  *   The display to update if known.
- * @return EntityDisplayInterface || NULL
+ *
+ * @return \Drupal\Core\Entity\Display\EntityDisplayInterface|NULL
+ *   The updated entity display.
  */
 function field_group_group_save($group, $display = NULL) {
   if ($display === NULL) {
@@ -578,7 +582,6 @@ function field_group_group_save($group, $display = NULL) {
 
   // If no display was found. It doesn't exist yet, create it.
   if (!isset($display)) {
-
     if ($group->context == 'form') {
       $display = EntityFormDisplay::create(array(
         'targetEntityType' => $group->entity_type,
@@ -596,9 +599,6 @@ function field_group_group_save($group, $display = NULL) {
 
   }
 
-  /**
-   * @var $display \Drupal\Core\Entity\Display\EntityDisplayInterface
-   */
   if (isset($display)) {
     $data = (array) $group;
     unset($data['group_name'], $data['entity_type'], $data['bundle'], $data['mode'], $data['form'], $data['context']);
