@@ -51,6 +51,12 @@ class AccordionItem extends FieldGroupFormatterBase {
       $element['#attached']['library'][] = 'field_group/formatter.details';
     }
 
+    foreach ($element as $key => $value) {
+      if (is_array($value) && !empty($value['#children_errors'])) {
+        $element['#open'] = TRUE;
+      }
+    }
+
   }
 
   /**
