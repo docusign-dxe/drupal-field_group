@@ -42,6 +42,7 @@ class Accordion extends RenderElement {
 
     // Add the jQuery UI accordion.
     $element['#attached']['library'][] = 'field_group/formatter.accordion';
+    $element['#attached']['library'][] = 'field_group/core';
 
     // Add the effect class.
     if (isset($element['#effect'])) {
