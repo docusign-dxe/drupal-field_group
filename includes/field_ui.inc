@@ -169,7 +169,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
         '#type' => 'textfield',
         '#default_value' => $group->weight,
         '#size' => 3,
-        '#attributes' => ['class' => ['field-weight'],
+        '#attributes' => ['class' => ['field-weight']],
       ],
       'parent_wrapper' => [
         'parent' => [

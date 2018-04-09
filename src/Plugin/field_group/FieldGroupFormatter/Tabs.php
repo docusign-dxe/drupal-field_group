@@ -69,7 +69,7 @@ class Tabs extends FieldGroupFormatterBase {
 
     // Make sure the group has 1 child. This is needed to succeed at form_pre_render_vertical_tabs().
     // Skipping this would force us to move all child groups to this array, making it an un-nestable.
-    $element['group']['#groups'][$this->group->group_name] = [0 => array[]];
+    $element['group']['#groups'][$this->group->group_name] = [0 => []];
     $element['group']['#groups'][$this->group->group_name]['#group_exists'] = TRUE;
 
     // Search for a tab that was marked as open. First one wins.
