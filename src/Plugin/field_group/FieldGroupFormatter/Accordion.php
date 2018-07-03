@@ -24,10 +24,10 @@ class Accordion extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element, $rendering_object) {
-    parent::preRender($element, $rendering_object);
+  public function process(&$element, $processed_object) {
 
-    $form_state = new FormState();
+    // Keep using preRender parent for BC.
+    parent::preRender($element, $processed_object);
 
     $element += [
       '#type' => 'field_group_accordion',
@@ -43,6 +43,15 @@ class Accordion extends FieldGroupFormatterBase {
       $element += ['#attributes' => ['class' => $classes]];
     }
 
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preRender(&$element, $rendering_object) {
+    $this->process($element, $rendering_object);
+
+    $form_state = new FormState();
     \Drupal\field_group\Element\Accordion::processAccordion($element, $form_state);
   }
 

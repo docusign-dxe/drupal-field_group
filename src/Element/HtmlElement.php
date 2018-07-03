@@ -20,7 +20,11 @@ class HtmlElement extends RenderElement {
 
     return [
       '#process' => [
+        [$class, 'processGroup'],
         [$class, 'processHtmlElement'],
+      ],
+      '#pre_render' => [
+        [$class, 'preRenderGroup'],
       ],
       '#theme_wrappers' => ['field_group_html_element'],
     ];

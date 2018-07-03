@@ -23,12 +23,11 @@ class Fieldset extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element, $rendering_object) {
+  public function process(&$element, $processed_object) {
 
     $element += [
       '#type' => 'fieldset',
       '#title' => Html::escape($this->t($this->getLabel())),
-      '#pre_render' => [],
       '#attributes' => [],
     ];
 
@@ -57,6 +56,15 @@ class Fieldset extends FieldGroupFormatterBase {
       $element['#attached']['library'][] = 'field_group/formatter.fieldset';
       $element['#attached']['library'][] = 'field_group/core';
     }
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preRender(&$element, $rendering_object) {
+    parent::preRender($element, $rendering_object);
+    $this->process($element, $rendering_object);
   }
 
   /**

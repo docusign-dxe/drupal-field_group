@@ -20,7 +20,11 @@ class Accordion extends RenderElement {
 
     return [
       '#process' => [
+        [$class, 'processGroup'],
         [$class, 'processAccordion'],
+      ],
+      '#pre_render' => [
+        [$class, 'preRenderGroup'],
       ],
       '#theme_wrappers' => ['field_group_accordion'],
     ];

@@ -23,8 +23,7 @@ class Details extends FieldGroupFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function preRender(&$element, $rendering_object) {
-    parent::preRender($element, $rendering_object);
+  public function process(&$element, $processed_object) {
 
     $element += [
       '#type' => 'details',
@@ -53,6 +52,15 @@ class Details extends FieldGroupFormatterBase {
       $element['#attached']['library'][] = 'field_group/formatter.details';
       $element['#attached']['library'][] = 'field_group/core';
     }
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preRender(&$element, $rendering_object) {
+    parent::preRender($element, $rendering_object);
+    $this->process($element, $rendering_object);
   }
 
   /**
