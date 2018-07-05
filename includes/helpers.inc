@@ -59,6 +59,6 @@ function field_group_validate_id($element, FormStateInterface $form_state) {
   $form_state_values = $form_state->getValues();
   $plugin_name = $form_state->get('plugin_settings_edit');
   if (!empty($form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id']) && !preg_match('!^[A-Za-z0-9-_]+$!', $form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id'])) {
-    Drupal::formBuilder()->setError($element, $form_state, t('The id must include only letters, numbers, underscores and dashes.'));
+    $form_state->setError($element, t('The id must include only letters, numbers, underscores and dashes.'));
   }
 }
