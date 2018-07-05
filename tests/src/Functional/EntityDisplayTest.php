@@ -161,10 +161,11 @@ class EntityDisplayTest extends BrowserTestBase {
     // Set show label to true.
     $group->format_settings['show_label'] = TRUE;
     $group->format_settings['label_element'] = 'h3';
+    $group->format_settings['label_element_classes'] = 'my-label-class';
     field_group_group_save($group);
 
     $this->drupalGet('node/' . $this->node->id());
-    $this->assertRaw('<h3>' . $data['label'] . '</h3>');
+    $this->assertRaw('<h3 class="my-label-class">' . $data['label'] . '</h3>');
 
     // Change to collapsible with blink effect.
     $group->format_settings['effect'] = 'blink';

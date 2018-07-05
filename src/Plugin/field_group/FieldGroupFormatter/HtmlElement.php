@@ -71,6 +71,15 @@ class HtmlElement extends FieldGroupFormatterBase {
     if ($this->getSetting('show_label')) {
       $element['#title_element'] = $this->getSetting('label_element');
       $element['#title'] = Html::escape($this->t($this->getLabel()));
+      $element['#title_attributes'] = new Attribute();
+
+      if (!empty($this->getSetting('label_element_classes'))) {
+        $element['#title_attributes']->addClass(explode(' ', $this->getSetting('label_element_classes')));
+      }
+
+      if (!empty($this->getSetting('effect')) && $this->getSetting('effect') !== 'none') {
+        $element['#title_attributes']->addClass('field-group-toggler');
+      }
     }
 
     if ($this->getSetting('required_fields')) {
@@ -120,6 +129,18 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#title' => $this->t('Label element'),
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('label_element'),
+      '#weight' => 3,
+      '#states' => [
+        'visible' => [
+          ':input[data-fieldgroup-selector="show_label"]' => ['value' => 1],
+        ],
+      ],
+    ];
+
+    $form['label_element_classes'] = [
+      '#title' => $this->t('Label element HTML classes'),
+      '#type' => 'textfield',
+      '#default_value' => $this->getSetting('label_element_classes'),
       '#weight' => 3,
       '#states' => [
         'visible' => [
@@ -190,6 +211,11 @@ class HtmlElement extends FieldGroupFormatterBase {
       $summary[] = $this->t('Label element: @element',
         ['@element' => $this->getSetting('label_element')]
       );
+      if (!empty($this->getSetting('label_element_classes'))) {
+        $summary[] = $this->t('Label element HTML classes: @label_classes', [
+          '@label_classes' => $this->getSetting('label_element_classes'),
+        ]);
+      }
     }
 
     if ($this->getSetting('attributes')) {
@@ -213,6 +239,7 @@ class HtmlElement extends FieldGroupFormatterBase {
       'element' => 'div',
       'show_label' => 0,
       'label_element' => 'h3',
+      'label_element_classes' => '',
       'effect' => 'none',
       'speed' => 'fast',
       'attributes' => '',

@@ -5,6 +5,8 @@
  * Preprocessors for fieldgroup elements.
  */
 
+use \Drupal\Core\Template\Attribute;
+
 /**
  * Prepares variables for horizontal tabs templates.
  *
@@ -61,7 +63,7 @@ function template_preprocess_field_group_accordion_item(&$variables) {
   }
 
   $variables['open'] = $element['#open'];
-  $variables['label_attributes'] = new \Drupal\Core\Template\Attribute();
+  $variables['label_attributes'] = new Attribute();
   $variables['children'] = (!empty($element['#children'])) ? $element['#children'] : '';
 
 }
@@ -84,6 +86,7 @@ function template_preprocess_field_group_html_element(&$variables) {
   if (!empty($element['#title']) && !empty($element['#title_element'])) {
     $variables['title_element'] = $element['#title_element'];
     $variables['title'] = $element['#title'];
+    $variables['title_attributes'] = $element['#title_attributes'];
   }
 
   $variables['collapsible'] = (!empty($element['#effect']) && $element['#effect'] !== 'none');
