@@ -38,7 +38,7 @@ $connection->schema()->createTable('field_group', [
       'not null' => TRUE,
       'length' => '128',
       'default' => '',
-    ,
+    ],
     'mode' => [
       'type' => 'varchar',
       'not null' => TRUE,
@@ -57,7 +57,7 @@ $connection->schema()->createTable('field_group', [
       'size' => 'big',
     ],
   ],
-  'primary key' => array[
+  'primary key' => [
     'id',
   ],
   'unique keys' => [

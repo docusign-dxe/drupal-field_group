@@ -34,8 +34,9 @@ class AccordionItem extends FieldGroupFormatterBase {
     parent::preRender($element, $processed_object);
 
     $element += [
-      '#type' => 'field_group_accordion',
+      '#type' => 'field_group_accordion_item',
       '#effect' => $this->getSetting('effect'),
+      '#title' => Html::escape($this->t($this->getLabel())),
     ];
 
     if ($this->getSetting('id')) {
@@ -57,6 +58,14 @@ class AccordionItem extends FieldGroupFormatterBase {
       }
     }
 
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preRender(&$element, $rendering_object) {
+    parent::preRender($element, $rendering_object);
+    $this->process($element, $rendering_object);
   }
 
   /**
