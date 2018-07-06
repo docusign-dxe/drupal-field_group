@@ -3,7 +3,6 @@
 namespace Drupal\field_group;
 
 use Drupal;
-use Drupal\Core\Url;
 
 /**
  * Static methods for fieldgroup formatters.

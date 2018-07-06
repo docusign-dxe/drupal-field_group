@@ -2,6 +2,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\field_group\Element\HtmlElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Template\Attribute;
@@ -96,7 +97,7 @@ class HtmlElement extends FieldGroupFormatterBase {
     $this->process($element, $rendering_object);
 
     $form_state = new FormState();
-    \Drupal\field_group\Element\HtmlElement::processHtmlElement($element, $form_state);
+    HtmlElement::processHtmlElement($element, $form_state);
   }
 
   /**
@@ -121,7 +122,7 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#default_value' => $this->getSetting('show_label'),
       '#weight' => 2,
       '#attributes' => [
-        'data-fieldgroup-selector' => 'show_label'
+        'data-fieldgroup-selector' => 'show_label',
       ],
     ];
 
@@ -172,12 +173,12 @@ class HtmlElement extends FieldGroupFormatterBase {
       '#options' => [
         'none' => $this->t('None'),
         'collapsible' => $this->t('Collapsible'),
-        'blind' => $this->t('Blind')
+        'blind' => $this->t('Blind'),
       ],
       '#default_value' => $this->getSetting('effect'),
       '#weight' => 6,
       '#attributes' => [
-        'data-fieldgroup-selector' => 'effect'
+        'data-fieldgroup-selector' => 'effect',
       ],
     ];
 

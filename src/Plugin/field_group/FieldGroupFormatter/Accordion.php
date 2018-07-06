@@ -2,6 +2,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\field_group\Element\Accordion;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormState;
 use Drupal\field_group\FieldGroupFormatterBase;
@@ -52,7 +53,7 @@ class Accordion extends FieldGroupFormatterBase {
     $this->process($element, $rendering_object);
 
     $form_state = new FormState();
-    \Drupal\field_group\Element\Accordion::processAccordion($element, $form_state);
+    Accordion::processAccordion($element, $form_state);
   }
 
   /**

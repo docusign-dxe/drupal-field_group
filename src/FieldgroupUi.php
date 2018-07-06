@@ -12,7 +12,8 @@ class FieldgroupUi {
 
   /**
    * Get the field ui route that should be used for given arguments.
-   * @param stdClass $group
+   *
+   * @param object $group
    *   The group to get the field ui route for.
    *
    * @return \Drupal\Core\Url
@@ -53,12 +54,14 @@ class FieldgroupUi {
 
   /**
    * Get the field group delete route for a given group.
+   *
    * @param \stdClass $group
+   *   The group to delete.
    *
    * @return \Drupal\Core\Url
    *   A URL object.
    */
-  public static function getDeleteRoute($group) {
+  public static function getDeleteRoute(\stdClass $group) {
 
     $entity_type_id = $group->entity_type;
     $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type_id);

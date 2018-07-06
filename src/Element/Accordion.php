@@ -42,7 +42,7 @@ class Accordion extends RenderElement {
    * @return array
    *   The processed element.
    */
-  public static function processAccordion(&$element, FormStateInterface $form_state) {
+  public static function processAccordion(array &$element, FormStateInterface $form_state) {
 
     // Add the jQuery UI accordion.
     $element['#attached']['library'][] = 'field_group/formatter.accordion';

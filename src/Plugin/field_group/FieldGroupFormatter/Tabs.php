@@ -33,7 +33,7 @@ class Tabs extends FieldGroupFormatterBase {
     parent::preRender($element, $processed_object);
 
     $element += [
-      '#prefix' => '<div class=" ' . implode(' ' , $this->getClasses()) . '">',
+      '#prefix' => '<div class=" ' . implode(' ', $this->getClasses()) . '">',
       '#suffix' => '</div>',
       '#tree' => TRUE,
       '#parents' => [$this->group->group_name],
@@ -72,14 +72,14 @@ class Tabs extends FieldGroupFormatterBase {
     $this->process($element, $rendering_object);
 
     if ($this->getSetting('direction') == 'vertical') {
-        $form_state = new FormState();
-        $complete_form = [];
-        $element = VerticalTabs::processVerticalTabs($element, $form_state, $complete_form);
+      $form_state = new FormState();
+      $complete_form = [];
+      $element = VerticalTabs::processVerticalTabs($element, $form_state, $complete_form);
     }
     else {
-        $form_state = new FormState();
-        $complete_form = [];
-        $element = HorizontalTabs::processHorizontalTabs($element, $form_state, $complete_form);
+      $form_state = new FormState();
+      $complete_form = [];
+      $element = HorizontalTabs::processHorizontalTabs($element, $form_state, $complete_form);
     }
 
     // Make sure the group has 1 child. This is needed to succeed at form_pre_render_vertical_tabs().

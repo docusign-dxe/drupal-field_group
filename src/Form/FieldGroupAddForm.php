@@ -126,7 +126,7 @@ class FieldGroupAddForm extends FormBase {
   /**
    * Build the formatter selection step.
    */
-  function buildFormatterSelectionForm(array &$form, FormStateInterface $form_state) {
+  public function buildFormatterSelectionForm(array &$form, FormStateInterface $form_state) {
 
     // Gather group formatters.
     $formatter_options = FormatterHelper::formatterOptions($this->context);
@@ -180,7 +180,7 @@ class FieldGroupAddForm extends FormBase {
       '#value' => $this->t('Save and continue'),
       '#button_type' => 'primary',
       '#validate' => [
-        [$this, 'validateFormatterSelection']
+        [$this, 'validateFormatterSelection'],
       ],
     ];
 
@@ -190,7 +190,7 @@ class FieldGroupAddForm extends FormBase {
   /**
    * Build the formatter configuration form.
    */
-  function buildConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array &$form, FormStateInterface $form_state) {
 
     $group = new \stdClass();
     $group->context = $this->context;
@@ -254,7 +254,7 @@ class FieldGroupAddForm extends FormBase {
         'bundle' => $this->bundle,
         'mode' => $this->mode,
         'context' => $this->context,
-        'children' =>[],
+        'children' => [],
         'parent_name' => '',
         'weight' => 20,
         'format_type' => $form_state->get('group_formatter'),
@@ -286,13 +286,13 @@ class FieldGroupAddForm extends FormBase {
    *   The machine name, not prefixed.
    * @param array $element
    *   An array containing the structure of the 'group_name' element.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    *
    * @return bool
    *   Whether or not the group machine name is taken.
    */
-  public function groupNameExists($value, $element, FormStateInterface $form_state) {
+  public function groupNameExists($value, array $element, FormStateInterface $form_state) {
 
     // Add the prefix.
     $group_name = self::GROUP_PREFIX . $value;

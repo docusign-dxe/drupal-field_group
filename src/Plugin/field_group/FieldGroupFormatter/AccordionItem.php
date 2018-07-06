@@ -2,7 +2,6 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal;
 use Drupal\Component\Utility\Html;
 use Drupal\field_group\FieldGroupFormatterBase;
 

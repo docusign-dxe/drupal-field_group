@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\field_group_migrate\Plugin\migrate\source\d7\FieldGroup.
- */
-
 namespace Drupal\field_group_migrate\Plugin\migrate\source\d7;
 
 use Drupal\migrate\Row;
@@ -69,7 +64,7 @@ class FieldGroup extends DrupalSqlBase {
         break;
 
       case 'multipage':
-      // @todo Check if there is a better way to deal with this format type.
+        // @todo Check if there is a better way to deal with this format type.
         $settings['format_type'] = 'tab';
         break;
 

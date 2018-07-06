@@ -45,7 +45,7 @@ class HorizontalTabs extends RenderElement {
    * @return array
    *   The modified element with all group members.
    */
-  public static function preRenderGroup($element) {
+  public static function preRenderGroup(array $element) {
     // The element may be rendered outside of a Form API context.
     if (!isset($element['#parents']) || !isset($element['#groups'])) {
       return $element;
@@ -89,7 +89,7 @@ class HorizontalTabs extends RenderElement {
    * @return array
    *   The processed element.
    */
-  public static function processHorizontalTabs(&$element, FormStateInterface $form_state, $on_form = TRUE) {
+  public static function processHorizontalTabs(array &$element, FormStateInterface $form_state, $on_form = TRUE) {
 
     // Inject a new details as child, so that form_process_details() processes
     // this details element like any other details.
@@ -118,7 +118,7 @@ class HorizontalTabs extends RenderElement {
     // form is rendered, e.g. on preview pages or when form validation
     // fails.
     $name = implode('__', $element['#parents']);
-    if ($form_state->hasValue($name . '__active_tab')){
+    if ($form_state->hasValue($name . '__active_tab')) {
       $element['#default_tab'] = $form_state->getValue($name . '__active_tab');
     }
     $element[$name . '__active_tab'] = [
@@ -148,7 +148,7 @@ class HorizontalTabs extends RenderElement {
    * @return array
    *   The processed element.
    */
-  public static function processGroup(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processGroup(array &$element, FormStateInterface $form_state, array &$complete_form) {
 
     $groups = &$form_state->getGroups();
     $element['#groups'] = &$groups;

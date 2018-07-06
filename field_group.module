@@ -5,6 +5,7 @@
  * Allows administrators to attach custom fields to fieldable types.
  */
 
+use Drupal\ds\Ds;
 use Drupal\Core\Entity\ContentEntityFormInterface;
 use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
@@ -72,10 +73,6 @@ function field_group_theme() {
 
 /**
  * Implements hook_theme_suggestions_alter().
- *
- * @param array $suggestions
- * @param array $variables
- * @param $hook
  */
 function field_group_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
   switch ($hook) {
@@ -176,7 +173,7 @@ function field_group_form_alter(array &$form, FormStateInterface $form_state) {
   if ($form_object instanceof ContentEntityFormInterface && !$form_object instanceof ConfirmFormInterface) {
 
     /**
-     * @var EntityFormDisplayInterface $form_display
+     * @var \Drupal\Core\Entity\Entity\EntityFormDisplayInterface $form_display
      */
     $storage = $form_state->getStorage();
     if (!empty($storage['form_display'])) {
@@ -236,11 +233,11 @@ function field_group_entity_view_alter(&$build, EntityInterface $entity, EntityD
   // Add a prerender.
   if (empty($build['#theme'])) {
 
-    $ds_enabled = false;
+    $ds_enabled = FALSE;
     if (Drupal::moduleHandler()->moduleExists('ds')) {
       // Check if DS is enabled for this display.
-      if ($display->getThirdPartySetting('ds', 'layout') && !Drupal\ds\Ds::isDisabled()) {
-        $ds_enabled = true;
+      if ($display->getThirdPartySetting('ds', 'layout') && !Ds::isDisabled()) {
+        $ds_enabled = TRUE;
       }
     }
 
@@ -461,7 +458,7 @@ function field_group_attach_groups(&$element, $context) {
 /**
  * Pre-render callback for entity views.
  *
- * @param $vars preprocess
+ * @param preprocess $vars
  *   Variables.
  * @param $context
  *   The display context (entity type, form or view).
@@ -536,11 +533,12 @@ function field_group_build_entity_groups(array &$vars, $context = 'view') {
  * place them in the correct container element, a fieldgroup.
  * The current group element in the loop is passed recursively so we can
  * stash fields and groups in it while we go deeper in the array.
- * @param Array $element
+ *
+ * @param array $element
  *   The current element to analyse for grouping.
- * @param Array $vars
+ * @param array $vars
  *   Rendering vars from the entity being viewed.
- * @param Array $context
+ * @param array $context
  *   The display context (entity type, form or view).
  */
 function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
@@ -571,7 +569,7 @@ function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
   // parent currently is situated.
   foreach ($element['#group_children'] as $child_name => $parent_name) {
 
-    // Entity being viewed
+    // Entity being viewed.
     if ($vars) {
       // If not a group, check the content variable for empty field.
       $key = field_group_get_content_element_key($context);
@@ -586,7 +584,7 @@ function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
         unset($element[$child_name]);
       }
     }
-    // Form being viewed
+    // Form being viewed.
     else {
       // Block denied fields (#access) before they are put in groups.
       // Fields (not groups) that don't have children (like field_permissions) are removed
@@ -693,7 +691,7 @@ function field_group_field_layout_fields_nest(array &$element, &$vars = NULL, $c
 function field_group_pre_render(& $element, $group, & $rendering_object) {
 
   // Only run the pre_render function if the group has elements.
-  // $group->group_name
+  // $group->group_name.
   if ($element == []) {
     return;
   }
@@ -738,7 +736,6 @@ function field_group_get_content_element_key($context = 'default') {
   return $key;
 }
 
-
 /**
  * Saves a group definition.
  *
@@ -751,7 +748,7 @@ function field_group_get_content_element_key($context = 'default') {
  * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
  *   The display to update if known.
  *
- * @return \Drupal\Core\Entity\Display\EntityDisplayInterface|NULL
+ * @return \Drupal\Core\Entity\Display\EntityDisplayInterface|null
  *   The updated entity display.
  */
 function field_group_group_save($group, $display = NULL) {
@@ -885,15 +882,15 @@ function field_group_load_field_group($group_name, $entity_type, $bundle, $conte
 /**
  * Checks if a field_group exists in required context.
  *
- * @param String $group_name
+ * @param string $group_name
  *   The name of the group.
- * @param String $entity_type
+ * @param string $entity_type
  *   The name of the entity.
- * @param String $bundle
+ * @param string $bundle
  *   The bundle for the entity.
  * @param $context
  *   The context of the view mode (form or view)
- * @param String $mode
+ * @param string $mode
  *   The view mode context the group will be rendered.
  */
 function field_group_exists($group_name, $entity_type, $bundle, $context, $mode) {
