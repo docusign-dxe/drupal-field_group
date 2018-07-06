@@ -20,7 +20,7 @@ class VerticalTabs {
    * @return array
    *   The modified element with all group members.
    */
-  public static function preRenderGroup(array $element) {
+  public static function preRenderGroup($element) {
     // The element may be rendered outside of a Form API context.
     if (!isset($element['#parents']) || !isset($element['#groups'])) {
       return $element;
