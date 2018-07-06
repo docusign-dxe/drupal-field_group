@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
+use Drupal\field_group\FormatterHelper;
 use Drupal\field_ui\Form\EntityDisplayFormBase;
 
 /**
@@ -121,7 +122,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
     }
   }
 
-  $formatter_options = field_group_field_formatter_options($params->context);
+  $formatter_options = FormatterHelper::formatterOptions($params->context);
 
   $refresh_rows = isset($form_state_values['refresh_rows']) ? $form_state_values['refresh_rows'] : (isset($form_state->getUserInput()['refresh_rows']) ? $form_state->getUserInput()['refresh_rows'] : NULL);
 
@@ -403,13 +404,12 @@ function field_group_display_overview_row_region($row) {
  */
 function field_group_field_overview_submit($form, FormStateInterface $form_state) {
   $form_values = $form_state->getValue('fields');
-  $fields_added = $form_state->getValue('fields_added');
-  $layout_id = $form_state->getValue('field_layout');
 
   /**
    * @var \Drupal\Core\Entity\EntityDisplayBase $display
    */
   $display = $form['#context'];
+  $manager = Drupal::service('plugin.manager.field_group.formatters');
 
   $entity_type = $display->get('targetEntityType');
   $bundle = $display->get('bundle');
@@ -462,8 +462,7 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
 
       // If the format type is changed, make sure we have all required format settings.
       if ($group->format_type != $old_format_type) {
-        $default_formatter_settings = _field_group_get_default_formatter_settings($group->format_type, $context);
-        $group->format_settings += $default_formatter_settings;
+        $group->format_settings += $manager->getDefaultSettings($group->format_type, $context);
       }
 
       /** @var EntityFormInterface $entity_form */
@@ -517,7 +516,7 @@ function field_group_formatter_settings_update(& $group, $settings) {
 
   // for format changes we load the defaults.
   if (empty($settings['settings_edit_form']['settings'])) {
-    $group->format_settings = _field_group_get_default_formatter_settings($group->format_type, $group->context);
+    $group->format_settings = Drupal::service('plugin.manager.field_group.formatters')->getDefaultSettings($group->format_type, $group->context);
   }
   else {
     $group->format_type = $settings['format']['type'];

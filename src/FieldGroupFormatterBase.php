@@ -3,6 +3,7 @@
 namespace Drupal\field_group;
 
 use Drupal\Core\Field\PluginSettingsBase;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base class for 'Fieldgroup formatter' plugin implementations.
@@ -81,6 +82,8 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
    */
   public function settingsForm() {
 
+    $class = get_class($this);
+
     $form = [];
     $form['label'] = [
       '#type' => 'textfield',
@@ -94,7 +97,7 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('id'),
       '#weight' => 10,
-      '#element_validate' => ['field_group_validate_id'],
+      '#element_validate' => [[$class, 'validateId']],
     ];
 
     $form['classes'] = [
@@ -102,7 +105,7 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('classes'),
       '#weight' => 11,
-      '#element_validate' => ['field_group_validate_css_class'],
+      '#element_validate' => [[$class, 'validateCssClass']],
     ];
 
     return $form;
@@ -187,6 +190,34 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
 
     // BC: Call the pre render layer to not break contrib plugins.
     return $this->preRender($element, $processed_object);
+  }
+
+  /**
+   * Validate the entered css class from the submitted format settings.
+   *
+   * @param Array $element The validated element
+   * @param FormStateInterface $form_state The state of the form.
+   */
+  public static function validateCssClass($element, FormStateInterface $form_state) {
+    $form_state_values = $form_state->getValues();
+    $plugin_name = $form_state->get('plugin_settings_edit');
+    if (!empty($form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['classes']) && !preg_match('!^[A-Za-z0-9-_ ]+$!', $form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['classes'])) {
+      $form_state->setError($element, t('The css class must include only letters, numbers, underscores and dashes.'));
+    }
+  }
+
+  /**
+   * Validate the entered id attribute from the submitted format settings.
+   *
+   * @param Array $element The validated element
+   * @param FormStateInterface $form_state The state of the form.
+   */
+  public static function validateId($element, FormStateInterface $form_state) {
+    $form_state_values = $form_state->getValues();
+    $plugin_name = $form_state->get('plugin_settings_edit');
+    if (!empty($form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id']) && !preg_match('!^[A-Za-z0-9-_]+$!', $form_state_values['fields'][$plugin_name]['settings_edit_form']['settings']['id'])) {
+      $form_state->setError($element, t('The id must include only letters, numbers, underscores and dashes.'));
+    }
   }
 
 }
