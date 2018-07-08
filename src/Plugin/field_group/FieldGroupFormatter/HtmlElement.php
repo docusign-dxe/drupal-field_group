@@ -2,7 +2,7 @@
 
 namespace Drupal\field_group\Plugin\field_group\FieldGroupFormatter;
 
-use Drupal\field_group\Element\HtmlElement;
+use Drupal\field_group\Element\HtmlElement as HtmlElementRenderElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Template\Attribute;
@@ -97,7 +97,7 @@ class HtmlElement extends FieldGroupFormatterBase {
     $this->process($element, $rendering_object);
 
     $form_state = new FormState();
-    HtmlElement::processHtmlElement($element, $form_state);
+    HtmlElementRenderElement::processHtmlElement($element, $form_state);
   }
 
   /**
