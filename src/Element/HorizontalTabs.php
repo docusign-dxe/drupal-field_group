@@ -148,7 +148,7 @@ class HorizontalTabs extends RenderElement {
    * @return array
    *   The processed element.
    */
-  public static function processGroup(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processGroup(&$element, FormStateInterface $form_state, &$complete_form) {
 
     $groups = &$form_state->getGroups();
     $element['#groups'] = &$groups;
