@@ -440,7 +440,7 @@ function field_group_field_overview_submit($form, FormStateInterface $form_state
   }
 
   // Update existing groups.
-  $groups = field_group_info_groups($entity_type, $bundle, $context, $mode, TRUE);
+  $groups = field_group_info_groups($entity_type, $bundle, $context, $mode);
   $field_group_form_state = $form_state->get('field_group');
   if (!empty($field_group_form_state)) {
     foreach ($form['#fieldgroups'] as $group_name) {
