@@ -938,7 +938,7 @@ function field_group_exists($group_name, $entity_type, $bundle, $context, $mode)
 function field_group_remove_empty_form_groups(&$element, $groups, $entity_type) {
   $exceptions = ['user__account', 'comment__author'];
 
-  $children = Element::children($element);
+  $children = Element::getVisibleChildren($element);
   $empty_groups_indication = array_fill_keys($groups, TRUE);
   if (count($children)) {
     foreach ($children as $childname) {
