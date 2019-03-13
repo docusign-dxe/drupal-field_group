@@ -354,7 +354,9 @@ function field_group_field_group_form_process(array &$element, &$group, &$comple
     'configuration' => ['label' => $group->label, 'settings' => $group->format_settings],
     'group' => $group,
   ]);
-  $plugin->process($element, $complete_form);
+  if ($plugin) {
+    $plugin->process($element, $complete_form);
+  }
 }
 
 /**
