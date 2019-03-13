@@ -37,6 +37,7 @@ class FieldGroup extends DrupalSqlBase {
       'label' => $data['label'],
       'format_settings' => $format_settings,
       'format_type' => $data['format_type'],
+      'region' => 'content',
     ];
     switch ($data['format_type']) {
       case 'div':
@@ -93,6 +94,7 @@ class FieldGroup extends DrupalSqlBase {
       'bundle' => $this->t('Bundle'),
       'mode' => $this->t('View mode'),
       'parent_name' => $this->t('Parent name'),
+      'region' => $this->t('Region'),
       'data' => $this->t('Data'),
     ];
     return $fields;
