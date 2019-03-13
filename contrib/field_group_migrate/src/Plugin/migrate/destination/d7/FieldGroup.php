@@ -29,6 +29,9 @@ class FieldGroup extends DestinationBase {
     $entity = $this->getEntity($values['entity_type'], $values['bundle'], $values['mode'], $values['type']);
     if (!$entity->isNew()) {
       $settings = $row->getDestinationProperty('settings');
+      $settings += [
+        'region' => 'content',
+      ];
       $entity->setThirdPartySetting('field_group', $row->getDestinationProperty('group_name'), $settings);
       if (isset($settings['format_type']) && ($settings['format_type'] == 'hidden')) {
         $entity->unsetThirdPartySetting('field_group', $row->getDestinationProperty('group_name'));
