@@ -385,7 +385,10 @@ function field_group_field_group_pre_render(&$element, &$group, &$rendering_obje
   $manager = Drupal::service('plugin.manager.field_group.formatters');
   $plugin = $manager->getInstance([
     'format_type' => $group->format_type,
-    'configuration' => ['label' => $group->label, 'settings' => $group->format_settings],
+    'configuration' => [
+      'label' => $group->label,
+      'settings' => $group->format_settings,
+    ],
     'group' => $group,
   ]);
   if ($plugin) {
@@ -787,6 +790,9 @@ function field_group_group_save($group, $display = NULL) {
   }
 
   if (isset($display)) {
+    // Remove label from the format_settings.
+    unset($group->format_settings['label']);
+
     $data = (array) $group;
     unset($data['group_name'], $data['entity_type'], $data['bundle'], $data['mode'], $data['form'], $data['context']);
     $display->setThirdPartySetting('field_group', $group->group_name, $data);

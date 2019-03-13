@@ -29,18 +29,12 @@ class Fieldset extends FieldGroupFormatterBase {
       '#type' => 'fieldset',
       '#title' => Html::escape($this->t($this->getLabel())),
       '#attributes' => [],
+      '#description' => $this->getSetting('description'),
     ];
 
-    if ($this->getSetting('description')) {
-      $element += [
-        '#description' => $this->getSetting('description'),
-      ];
-
-      // When a fieldset has a description, an id is required.
-      if (!$this->getSetting('id')) {
-        $element['#id'] = Html::getUniqueId($this->group->group_name);
-      }
-
+    // When a fieldset has a description, an id is required.
+    if ($this->getSetting('description') && !$this->getSetting('id')) {
+      $element['#id'] = Html::getUniqueId($this->group->group_name);
     }
 
     if ($this->getSetting('id')) {
@@ -102,12 +96,6 @@ class Fieldset extends FieldGroupFormatterBase {
 
     if ($this->getSetting('required_fields')) {
       $summary[] = $this->t('Mark as required');
-    }
-
-    if ($this->getSetting('description')) {
-      $summary[] = $this->t('Description : @description',
-        ['@description' => $this->getSetting('description')]
-      );
     }
 
     return $summary;

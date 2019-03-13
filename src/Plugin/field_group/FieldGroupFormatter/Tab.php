@@ -19,7 +19,7 @@ use Drupal\field_group\FieldGroupFormatterBase;
  *   supported_contexts = {
  *     "form",
  *     "view",
- *   },
+ *   }
  * )
  */
 class Tab extends FieldGroupFormatterBase {
@@ -81,18 +81,18 @@ class Tab extends FieldGroupFormatterBase {
 
     $form = parent::settingsForm();
 
+    $form['description'] = [
+      '#title' => $this->t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $this->getSetting('description'),
+      '#weight' => -4,
+    ];
+
     $form['formatter'] = [
       '#title' => $this->t('Default state'),
       '#type' => 'select',
       '#options' => array_combine($this->pluginDefinition['format_types'], $this->pluginDefinition['format_types']),
       '#default_value' => $this->getSetting('formatter'),
-      '#weight' => -4,
-    ];
-
-    $form['description'] = [
-      '#title' => $this->t('Description'),
-      '#type' => 'textarea',
-      '#default_value' => $this->getSetting('description'),
       '#weight' => -4,
     ];
 

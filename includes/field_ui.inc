@@ -497,7 +497,10 @@ function field_group_format_settings_form(&$group, $form, $form_state) {
   $manager = \Drupal::service('plugin.manager.field_group.formatters');
   $plugin = $manager->getInstance([
     'format_type' => $group->format_type,
-    'configuration' => ['label' => $group->label, 'settings' => $group->format_settings],
+    'configuration' => [
+      'label' => $group->label,
+      'settings' => $group->format_settings,
+    ],
     'group' => $group,
   ]);
 
@@ -559,7 +562,10 @@ function field_group_format_settings_summary($group_name, $group) {
   $manager = \Drupal::service('plugin.manager.field_group.formatters');
   $plugin = $manager->getInstance([
     'format_type' => $group->format_type,
-    'configuration' => ['label' => $group->label, 'settings' => $group->format_settings],
+    'configuration' => [
+      'label' => $group->label,
+      'settings' => $group->format_settings,
+    ],
     'group' => $group,
   ]);
 

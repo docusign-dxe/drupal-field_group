@@ -29,6 +29,7 @@ class Details extends FieldGroupFormatterBase {
       '#type' => 'details',
       '#title' => Html::escape($this->t($this->getLabel())),
       '#open' => $this->getSetting('open'),
+      '#description' => $this->getSetting('description'),
     ];
 
     if ($this->getSetting('id')) {
@@ -39,12 +40,6 @@ class Details extends FieldGroupFormatterBase {
     if (!empty($classes)) {
       $element += [
         '#attributes' => ['class' => $classes],
-      ];
-    }
-
-    if ($this->getSetting('description')) {
-      $element += [
-        '#description' => $this->getSetting('description'),
       ];
     }
 
@@ -68,6 +63,13 @@ class Details extends FieldGroupFormatterBase {
    */
   public function settingsForm() {
     $form = parent::settingsForm();
+
+    $form['description'] = [
+      '#title' => $this->t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $this->getSetting('description'),
+      '#weight' => -4,
+    ];
 
     $form['open'] = [
       '#type' => 'checkbox',
