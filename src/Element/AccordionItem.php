@@ -24,7 +24,7 @@ class AccordionItem extends RenderElement {
       '#pre_render' => [
         [$class, 'preRenderGroup'],
       ],
-      '#open' => TRUE,
+      '#open' => FALSE,
       '#theme_wrappers' => ['field_group_accordion_item'],
     ];
   }
