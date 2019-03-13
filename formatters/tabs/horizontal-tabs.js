@@ -234,7 +234,7 @@
 
     tab.item = $('<li class="horizontal-tab-button" tabindex="-1"></li>')
       .append(tab.link = $('<a href="#' + idAttr + '"></a>')
-        .append(tab.title = $('<strong></strong>').text(settings.title))
+        .append(tab.title = $('<strong></strong>').html(settings.title))
       );
 
     // No need to add summary on frontend.
