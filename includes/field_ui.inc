@@ -501,7 +501,11 @@ function field_group_format_settings_form(&$group, $form, $form_state) {
     'group' => $group,
   ]);
 
-  return $plugin->settingsForm($form, $form_state);
+  if ($plugin) {
+    return $plugin->settingsForm($form, $form_state);
+  }
+
+  return [];
 }
 
 /**
@@ -559,7 +563,12 @@ function field_group_format_settings_summary($group_name, $group) {
     'group' => $group,
   ]);
 
-  $summary = $plugin->settingsSummary();
+  if ($plugin) {
+    $summary = $plugin->settingsSummary();
+  }
+  else {
+    $summary = '';
+  }
 
   return [
     '#markup' => '<div class="field-plugin-summary">' . implode('<br />', $summary) . '</div>',
