@@ -82,8 +82,8 @@
           // If the current URL has a fragment and one of the tabs contains an
           // element that matches the URL fragment, activate that tab.
           var hash = window.location.hash.replace(/[=%;,\/]/g, '');
-          if (hash !== '#' && $(hash, this).length) {
-            tab_focus = $(window.location.hash, this).closest('.horizontal-tabs-pane');
+          if (hash !== '#' && $(this).find(hash).length) {
+            tab_focus = $(this).find(hash).closest('.horizontal-tabs-pane');
           }
           else {
             tab_focus = $this.find('> .horizontal-tabs-pane:first');
