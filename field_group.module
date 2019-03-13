@@ -281,10 +281,14 @@ function field_group_form_pre_render(array $element) {
  *
  * @param array $element
  *   Form that is being processed.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $form
+ *   The complete form structure.
  *
  * @return array
  */
-function field_group_form_process(array &$element) {
+function field_group_form_process(array &$element, FormStateInterface $form_state = NULL, array &$form = []) {
   if (empty($element['#field_group_form_process'])) {
     $element['#field_group_form_process'] = TRUE;
     if (empty($element['#fieldgroups'])) {
@@ -331,7 +335,7 @@ function field_group_form_process(array &$element) {
     }
 
     // Allow others to alter the complete processed build.
-    Drupal::moduleHandler()->alter('field_group_form_process_build', $element);
+    Drupal::moduleHandler()->alter('field_group_form_process_build', $element, $form_state, $form);
   }
 
   return $element;
@@ -415,10 +419,14 @@ function field_group_field_group_pre_render(&$element, &$group, &$rendering_obje
 /**
  * Implements hook_field_group_form_process_build_alter().
  *
- * @param array $elements
- *   By address.
+ * @param array $element
+ *   Element being processed.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $form
+ *   The complete form structure.
  */
-function field_group_field_group_form_process_build_alter(array &$element) {
+function field_group_field_group_form_process_build_alter(array &$element, FormStateInterface $form_state, array &$form) {
   $groups = array_keys($element['#fieldgroups']);
   field_group_remove_empty_form_groups($element, $groups, $element['#entity_type']);
 }
