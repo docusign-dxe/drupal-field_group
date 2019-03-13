@@ -10,7 +10,7 @@ use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
  *
  * @MigrateSource(
  *   id = "d6_field_group",
- *   source_module = "field_group",
+ *   source_module = "fieldgroup",
  *   destination_module = "field_group"
  * )
  */
