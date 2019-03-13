@@ -5,6 +5,7 @@
  * Allows administrators to attach custom fields to fieldable types.
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\ds\Ds;
 use Drupal\Core\Entity\ContentEntityFormInterface;
 use Drupal\Core\Entity\Display\EntityDisplayInterface;
@@ -15,6 +16,21 @@ use Drupal\Core\Form\ConfirmFormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\field_group\Element\VerticalTabs;
+
+/**
+ * Implements hook_help().
+ */
+function field_group_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.field_group':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Fieldgroup will, as the name implies, group fields together. All fieldable entities will have the possibility to add groups to wrap their fields together. Fieldgroup comes with default HTML wrappers like vertical tabs, horizontal tabs, accordions, fieldsets or div wrappers.') . '</p>';
+      $output .= '<p>' . t('The field group project is a follow-up on the field group module in <a href="@linkcck">CCK</a>. The release will only exist for Drupal 7 release and higher, so since the existence of the Fields API in core.</br>By moving field group to a separate module, this may open some new perspectives.', ['@linkcck' => 'http://drupal.org/project/cck']) . '</p>';
+      $output .= '<h3>' . t('More Information') . '</h3>';
+      $output .= '<p>' . t('For more information about this module please visit the <a href="@link">module page</a>.', ['@link' => 'https://www.drupal.org/project/field_group']) . '</p>';
+      return $output;
+  }
+}
 
 /**
  * Implements hook_theme_registry_alter().
