@@ -120,7 +120,7 @@ class HorizontalTabs extends RenderElement {
 
     $groups = &$form_state->getGroups();
     $group_name = $element['#group_name'];
-    $displayed_tab = $element['#default_tab'] ?? '';
+    $displayed_tab = isset($element['#default_tab']) ? $element['#default_tab'] : '';
     if (isset($groups[$group_name]) && empty($displayed_tab)) {
       foreach (Element::children($groups[$group_name]) as $child) {
         $child_group = $groups[$group_name][$child];
