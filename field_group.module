@@ -98,9 +98,9 @@ function field_group_theme_suggestions_alter(array &$suggestions, array $variabl
     case 'field_group_html_element':
       $element = $variables['element'];
 
-      $name = $element['#group_name'];
-      $entity_type = $element['#entity_type'];
-      $bundle = $element['#bundle'];
+      $name = !empty($element['#group_name']) ? $element['#group_name'] : NULL;
+      $entity_type = !empty($element['#entity_type']) ? $element['#entity_type'] : NULL;
+      $bundle = !empty($element['#bundle']) ? $element['#bundle'] : NULL;
 
       $wrapper = '';
       if (isset($element['#wrapper_element'])) {
@@ -108,21 +108,33 @@ function field_group_theme_suggestions_alter(array &$suggestions, array $variabl
         $suggestions[] = $hook . '__' . $wrapper;
       }
 
-      $suggestions[] = $hook . '__' . $entity_type;
-      $suggestions[] = $hook . '__' . $bundle;
-      $suggestions[] = $hook . '__' . $name;
+      if (!empty($entity_type)) {
+        $suggestions[] = $hook . '__' . $entity_type;
+      }
+      if (!empty($bundle)) {
+        $suggestions[] = $hook . '__' . $bundle;
+      }
+      if (!empty($name)) {
+        $suggestions[] = $hook . '__' . $name;
+      }
 
-      if ($wrapper) {
+      if ($wrapper && !empty($entity_type)) {
         $suggestions[] = $hook . '__' . $entity_type . '__' . $wrapper;
       }
 
-      $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle;
-      $suggestions[] = $hook . '__' . $entity_type . '__' . $name;
+      if (!empty($entity_type) && !empty($bundle)) {
+        $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle;
+      }
+      if (!empty($entity_type) && !empty($name)) {
+        $suggestions[] = $hook . '__' . $entity_type . '__' . $name;
+      }
 
-      if ($wrapper) {
+      if ($wrapper && !empty($entity_type) && !empty($bundle)) {
         $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $wrapper;
       }
-      $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $name;
+      if (!empty($entity_type) && !empty($bundle) && !empty($name)) {
+        $suggestions[] = $hook . '__' . $entity_type . '__' . $bundle . '__' . $name;
+      }
       break;
   }
 
