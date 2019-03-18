@@ -27,9 +27,10 @@
   border-left: 1px solid #dedede;
 }
 
-.horizontal-tabs-pane {
+.horizontal-tabs-panes .horizontal-tabs-pane {
   padding: 0 1em;
   border: 0;
+  background-color: unset;
 }
 
 .horizontal-tabs-pane > summary {
