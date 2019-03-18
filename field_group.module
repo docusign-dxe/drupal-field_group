@@ -605,6 +605,12 @@ function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
       // If not a group, check the content variable for empty field.
       $key = field_group_get_content_element_key($context);
       if (!isset($element['#fieldgroups'][$child_name]) && isset($vars[$key][$child_name])) {
+
+        // ECK marks his defaut properties as printed, while it is not printed yet.
+        if ($context === 'eck_entity' && !empty($vars[$key][$child_name]['#printed'])) {
+          $vars[$key][$child_name]['#printed'] = FALSE;
+        }
+
         $group_references[$parent_name][$child_name] = $vars[$key][$child_name];
         unset($vars[$key][$child_name]);
       }
@@ -691,6 +697,12 @@ function field_group_field_layout_fields_nest(array &$element, &$vars = NULL, $c
     // If not a group, check the content variable for empty field.
     $key = field_group_get_content_element_key($context);
     if (!isset($element['#fieldgroups'][$child_name]) && isset($vars[$key]['_field_layout'][$region][$child_name])) {
+
+      // ECK marks his defaut properties as printed, while it is not printed yet.
+      if ($context === 'eck_entity' && !empty($vars[$key]['_field_layout'][$region][$child_name]['#printed'])) {
+        $vars[$key]['_field_layout'][$region][$child_name]['#printed'] = FALSE;
+      }
+
       $group_references[$group_name][$child_name] = $vars[$key]['_field_layout'][$region][$child_name];
       unset($vars[$key]['_field_layout'][$region][$child_name]);
     }
