@@ -447,7 +447,7 @@ function field_group_field_group_form_process_build_alter(array &$element, $form
  * Implements hook_field_group_build_pre_render_alter().
  *
  * @param array $elements
- *   By address.
+ *   By address.field_group_entity_display_build_alter
  */
 function field_group_field_group_build_pre_render_alter(& $element) {
   // Someone is doing a node view, in a node view. Reset content.
@@ -477,6 +477,10 @@ function field_group_field_group_build_pre_render_alter(& $element) {
  *   The contextual information.
  */
 function field_group_attach_groups(&$element, $context) {
+
+  if ($context['mode'] == '_custom') {
+    return;
+  }
 
   $entity_type = $context['entity_type'];
   $bundle = $context['bundle'];
