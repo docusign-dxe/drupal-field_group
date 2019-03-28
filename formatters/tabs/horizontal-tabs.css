@@ -125,6 +125,6 @@ div.field-group-htabs-wrapper .field-group-format-wrapper {
 .horizontal-tabs .horizontal-tab-hidden {
   display: block;
   position: absolute;
-  top: -100000px;
+  top: -100000000px;
   width: 100%;
 }
