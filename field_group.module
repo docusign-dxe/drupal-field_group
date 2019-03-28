@@ -438,7 +438,7 @@ function field_group_field_group_pre_render(&$element, &$group, &$rendering_obje
  * @param array $form
  *   The complete form structure.
  */
-function field_group_field_group_form_process_build_alter(array &$element, FormStateInterface $form_state, array &$form) {
+function field_group_field_group_form_process_build_alter(array &$element, FormStateInterface $form_state = NULL, array &$form = []) {
   $groups = array_keys($element['#fieldgroups']);
   field_group_remove_empty_form_groups($element, $groups, $element['#entity_type']);
 }
