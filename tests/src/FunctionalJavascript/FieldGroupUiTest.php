@@ -3,7 +3,7 @@
 namespace Drupal\Tests\field_group\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
-use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\field_group\Functional\FieldGroupTestTrait;
 
@@ -12,7 +12,7 @@ use Drupal\Tests\field_group\Functional\FieldGroupTestTrait;
  *
  * @group field_group
  */
-class FieldGroupUiTest extends JavascriptTestBase {
+class FieldGroupUiTest extends WebDriverTestBase {
 
   use FieldGroupTestTrait;
 

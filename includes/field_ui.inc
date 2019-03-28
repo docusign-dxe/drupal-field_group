@@ -326,7 +326,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
       $group_check = field_group_load_field_group($group_name, $params->entity_type, $params->bundle, $params->context, $params->mode);
       if (isset($parent_requirements[$group_check->format_type])) {
         if (!$group_check->parent_name || field_group_load_field_group($group_check->parent_name, $params->entity_type, $params->bundle, $params->context, $params->mode)->format_type != $parent_requirements[$group_check->format_type]['parent']) {
-          drupal_set_message(t($parent_requirements[$group_check->format_type]['message']), 'warning', FALSE);
+          \Drupal::messenger()->addMessage(t($parent_requirements[$group_check->format_type]['message']), 'warning', FALSE);
         }
       }
     }
@@ -604,7 +604,7 @@ function field_group_field_ui_clone_field_groups_validate($form, FormStateInterf
   foreach ($source_groups as $key => $group) {
     if (in_array($group->format_type, $non_existing_types)) {
       unset($source_groups[$key]);
-      drupal_set_message(t('Skipping @group because this type does not exist in current mode', ['@group' => $group->label]), 'warning');
+      \Drupal::messenger()->addMessage(t('Skipping @group because this type does not exist in current mode', ['@group' => $group->label]), 'warning');
     }
   }
 
@@ -630,7 +630,7 @@ function field_group_field_ui_clone_field_groups($form, FormStateInterface $form
     $field_group_params = $form_state->get('field_group_params');
     foreach ($source_groups as $source_group) {
       if (in_array($source_group->group_name, $fields)) {
-        drupal_set_message(t('Fieldgroup @group is not cloned since a group already exists with the same name.', ['@group' => $source_group->group_name]), 'warning');
+        \Drupal::messenger()->addMessage(t('Fieldgroup @group is not cloned since a group already exists with the same name.', ['@group' => $source_group->group_name]), 'warning');
         continue;
       }
 
@@ -639,7 +639,7 @@ function field_group_field_ui_clone_field_groups($form, FormStateInterface $form
       $source_group->children = [];
       field_group_group_save($source_group);
 
-      drupal_set_message(t('Fieldgroup @group cloned successfully.', ['@group' => $source_group->group_name]));
+      \Drupal::messenger()->addMessage(t('Fieldgroup @group cloned successfully.', ['@group' => $source_group->group_name]));
 
     }
   }

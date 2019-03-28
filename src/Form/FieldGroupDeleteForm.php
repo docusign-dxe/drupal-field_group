@@ -4,7 +4,9 @@ namespace Drupal\field_group\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\field_group\FieldgroupUi;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form for removing a fieldgroup from a bundle.
@@ -17,6 +19,32 @@ class FieldGroupDeleteForm extends ConfirmFormBase {
    * @var object
    */
   protected $fieldGroup;
+
+  /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * FieldGroupDeleteForm constructor.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   */
+  public function __construct(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('messenger')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -54,7 +82,7 @@ class FieldGroupDeleteForm extends ConfirmFormBase {
 
     field_group_group_delete($this->fieldGroup);
 
-    drupal_set_message(t('The group %group has been deleted from the %type content type.', ['%group' => t($this->fieldGroup->label), '%type' => $bundle_label]));
+    $this->messenger->addMessage(t('The group %group has been deleted from the %type content type.', ['%group' => t($this->fieldGroup->label), '%type' => $bundle_label]));
 
     // Redirect.
     $form_state->setRedirectUrl($this->getCancelUrl());

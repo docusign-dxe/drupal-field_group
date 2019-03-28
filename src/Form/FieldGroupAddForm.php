@@ -4,6 +4,7 @@ namespace Drupal\field_group\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field_group\FieldGroupFormatterPluginManager;
 use Drupal\field_group\FieldgroupUi;
@@ -65,20 +66,33 @@ class FieldGroupAddForm extends FormBase {
   protected $fieldGroupFormatterPluginManager;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * FieldGroupAddForm constructor.
    *
    * @param \Drupal\field_group\FieldGroupFormatterPluginManager $fieldGroupFormatterPluginManager
    *   The field group formatter plugin manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
-  public function __construct(FieldGroupFormatterPluginManager $fieldGroupFormatterPluginManager) {
+  public function __construct(FieldGroupFormatterPluginManager $fieldGroupFormatterPluginManager, MessengerInterface $messenger) {
     $this->fieldGroupFormatterPluginManager = $fieldGroupFormatterPluginManager;
+    $this->messenger = $messenger;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('plugin.manager.field_group.formatters'));
+    return new static(
+      $container->get('plugin.manager.field_group.formatters'),
+      $container->get('messenger')
+    );
   }
 
   /**
@@ -270,7 +284,7 @@ class FieldGroupAddForm extends FormBase {
       // Store new group information for any additional submit handlers.
       $groups_added = $form_state->get('groups_added');
       $groups_added['_add_new_group'] = $new_group->group_name;
-      drupal_set_message(t('New group %label successfully created.', ['%label' => $new_group->label]));
+      $this->messenger->addMessage(t('New group %label successfully created.', ['%label' => $new_group->label]));
 
       $form_state->setRedirectUrl(FieldgroupUi::getFieldUiRoute($new_group));
       \Drupal::cache()->invalidate('field_groups');

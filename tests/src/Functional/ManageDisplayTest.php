@@ -124,7 +124,7 @@ class ManageDisplayTest extends BrowserTestBase {
     $group = $this->createGroup('node', $this->type, 'view', 'default', $data);
 
     $this->drupalPostForm('admin/structure/types/manage/' . $this->type . '/display/' . $group->group_name . '/delete', [], t('Delete'));
-    $this->assertRaw(t('The group %label has been deleted from the %type content type.', ['%label' => $group->label, '%type' => $this->type]));
+    $this->assertSession()->responseContains(t('The group %label has been deleted from the %type content type.', ['%label' => $group->label, '%type' => $this->type]));
 
     // Test that group is not in the $groups array.
     \Drupal::entityTypeManager()
@@ -148,7 +148,7 @@ class ManageDisplayTest extends BrowserTestBase {
       'fields[body][parent]' => $group->group_name,
     ];
     $this->drupalPostForm('admin/structure/types/manage/' . $this->type . '/form-display', $edit, 'Save');
-    $this->assertRaw('Your settings have been saved.');
+    $this->assertSession()->responseContains('Your settings have been saved.');
 
     $group = field_group_load_field_group($group->group_name, 'node', $this->type, 'form', 'default');
     $this->assertTrue(in_array('body', $group->children), t('Body is a child of %group', ['%group' => $group->group_name]));
