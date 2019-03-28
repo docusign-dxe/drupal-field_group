@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\field_group\Functional;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -58,7 +57,7 @@ class ManageDisplayTest extends BrowserTestBase {
   public function testCreateGroup() {
     // Create random group name.
     $group_label = $this->randomString(8);
-    $group_name_input = Unicode::strtolower($this->randomMachineName());
+    $group_name_input = mb_strtolower($this->randomMachineName());
     $group_name = 'group_' . $group_name_input;
     $group_formatter = 'details';
 

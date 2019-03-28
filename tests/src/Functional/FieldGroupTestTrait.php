@@ -3,7 +3,6 @@
 namespace Drupal\Tests\field_group\Functional;
 
 use Drupal;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides common functionality for the FieldGroup test classes.
@@ -35,7 +34,7 @@ trait FieldGroupTestTrait {
 
     $data['format_settings'] += Drupal::service('plugin.manager.field_group.formatters')->getDefaultSettings($data['format_type'], $context);
 
-    $group_name = 'group_' . Unicode::strtolower($this->randomMachineName());
+    $group_name = 'group_' . mb_strtolower($this->randomMachineName());
 
     $field_group = (object) [
       'group_name' => $group_name,
