@@ -1,0 +1,1 @@
+- Fix Allow to position the group in the advanced (sidebar) column: https://www.drupal.org/project/field_group/issues/2652642#comment-13127148
